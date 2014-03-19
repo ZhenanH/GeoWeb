@@ -1,0 +1,305 @@
+extends layout
+
+block leaflet
+	link(rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css")
+	script(src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js")
+	script(src="javascripts/JSONFormatter.js")
+	link(href='stylesheets/jsonFormatter.css' media='all' rel='stylesheet' type='text/css')
+	link(rel="stylesheet"  href='http://getbootstrap.com/assets/css/docs.min.css')
+
+block sidebar-item1
+	a(onclick="setMapCenter(1)", style="cursor:pointer") The Shops At Willow Bend 
+
+block sidebar-item2
+	a(onclick="setMapCenter(2)",style="cursor:pointer") Dallas-Fort Worth International Airport
+
+block sidebar-item3
+	a(onclick="setMapCenter(3)",style="cursor:pointer") UT Dallas - Arts and Technology Building 
+
+block sidebar-item4
+	a(onclick="setMapCenter(4)",style="cursor:pointer") Perot Museum of Nature and Science    
+
+block MapDemo
+	h1.page-header Web Demo
+	#demoMap
+		#map
+		.bs-callout.bs-callout-info
+			h4 Message
+			#message
+			ul#merchantList
+	#rawdata.bs-callout.bs-callout-info
+		h4 Response
+		#raw
+
+		script(type='text/javascript').
+				var map = L.map('map');
+				
+				map.setView([33.030991,-96.832166], 14);
+
+				L.tileLayer('http://{s}.tile.cloudmade.com/7ead762fbc454110bcc91116286be0d7/997/256/{z}/{x}/{y}.png',
+						{
+							maxZoom : 19
+						}).addTo(map);
+
+				map.on('click', onMapClick);	
+
+				function onMapClick(e) {
+					if ( !e.latlng || !e.latlng.lat || !e.latlng.lng ) {
+						return;
+					}
+					load(e.latlng.lat, e.latlng.lng);
+				}
+
+				var _marker;
+				var _lat;
+				var _lng;
+
+				function load(lat, lng) {
+					_lat = lat;
+					_lng = lng;
+					
+					if ( _marker ) {
+						for (var i=0; i<_marker.length; i++) {
+							map.removeLayer(_marker[i]);
+						}
+					}
+					_marker = new Array();
+					
+					if ( _polygon ) {
+						for (var i=0; i<_polygon.length; i++) {
+							map.removeLayer(_polygon[i]);
+						}
+					}
+					_polygon = new Array();
+					//var myIcon = L.icon({iconUrl: 'img/marker_cyan.png', iconSize: [40, 61], iconAnchor: L.point(20, 61) });
+					_marker.push( L.marker([lat, lng]).addTo(map) );
+					
+
+					loadOne(lat, lng);
+				}
+
+				function loadOne(lat, lng) {
+					$("#merchantList").empty();
+
+					var url =  getServerURL();
+					url += '&Data.lat=' + lat;
+					url += '&Data.lon=' + lng;
+					
+					showMessage("loading... ");
+					$.ajax({
+						url : "/api",
+						dataType : 'json',
+						data : {url:url},
+						success : function(result) {
+							onloadReady(result);
+							JSONFormatter.format(result,{
+								collapse: false, // Setting to 'true' this will format the JSON into a collapsable/expandable tree
+								appendTo: '#raw' // A string of the id, class or element name to append the formatted json
+								//list_id: 'json' // The name of the id at the root ul of the formatted JSON
+								});
+						},
+						fail : null
+					});
+				}
+				
+				function onloadReady(result) {
+
+					if (result == null) {
+						return;
+					}
+					showMessage('');
+
+					var output = result.Output;
+					if (!output || output.length < 1) {
+						return;
+					}
+					
+					
+					var t = 'POIs: <b>';
+					var resultCode = output[0].ResultCode * 1;
+					switch ( resultCode ) {
+						case 1:
+							t += 'Indoor';
+							break;
+						case 2:
+							t += 'Building Blue Print';
+							break;
+						case 3:
+							t += 'Inside Boundary';
+							break;
+						case 4:
+							t += 'Nearby';
+							break;
+					}
+					//t += '</b><br/><br/>';
+					
+					var hasName = false;
+					for (var i=0; i<output.length; i++) {
+						
+						var item = output[i];
+						var hasOneName = false;
+					
+						if ( item.parcel_polygon ) {
+							drawPoly(item.parcel_polygon, '#FF0000', '#FF3366');				
+						}
+						if ( item.bbp_polygon ) {
+							drawPoly(item.bbp_polygon, '#3366CC', '#330066');
+						}
+						if ( item.indoor_polygon ) {
+							drawPoly(item.indoor_polygon, '#339900', '#66CC33');
+						}
+						
+						
+						
+						if ( item.Name ) {
+							//t += item.Name;
+							hasName = true;
+							hasOneName = true;
+							var merchantItem = "<span class='glyphicon glyphicon-map-marker'></span>";
+
+							if(item.Category)
+								{	
+									if(item.Category.indexOf("Shop")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-shopping-cart'></span>";
+									if(item.Category.indexOf("Restaurant")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-cutlery'></span>";
+									if(item.Category.indexOf("Company")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-briefcase'></span>";
+									if(item.Category.indexOf("Nightlife")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-glass'></span>";
+									if(item.Category.indexOf("Park ")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-tree-conifer'></span>";
+									if(item.Category.indexOf("Air")!=-1)
+										merchantItem = "<span class='glyphicon glyphicon-plane'></span>"
+
+								}
+
+							$("#merchantList").append("<li>"+merchantItem+item.Name+"</li>");
+						} 			
+						
+						if ( item.ResultCode == 1 ) {
+							if ( !item.Name ) {
+								if ( item.indoor_type ) {		
+									hasOneName = true;
+									t += '  ' +  item.indoor_type;
+								}
+							}
+						}
+						
+						if ( item.Stname ) {
+							//t += '<br/>'
+							//t += item.Stname;
+						} 			
+						
+						var lat = item.Latitude;
+						var lon = item.Longitude;
+						if ( !isNaN(lat) && !isNaN(lon) ) {
+							if ( lat != 0 && lon != 0 ) {
+								var myIcon = L.icon({iconUrl: 'images/pin.png', iconSize: [30, 29], iconAnchor: L.point(15, 15) });
+								_marker.push( L.marker([lat, lon], {icon: myIcon}).addTo(map) );
+							}
+						}
+						if ( hasOneName ) {	
+							//t += '<br/><br/>';
+						}
+					}
+					if ( hasName ) {
+						showMessage(t);
+					}
+				}	
+				
+				var _polygon;
+				function drawPoly(polygon, colorIn, fillColorIn) {
+					if ( !polygon ) {
+						return;
+					}
+					
+					var p = polygon.substring(10, polygon.length-2);
+					var points = p.split(',');
+					if ( !points || points.length < 1) {
+						return;
+					}
+					
+					var ps = new Array();
+					for (var i=0; i<points.length; i++) {
+						var ll = points[i].split(' ');
+						if ( !ll || ll.length < 2) {
+							continue;
+						}
+						
+						var lat = ll[1] * 1.0;
+						var lng = ll[0] * 1.0;
+						
+						if ( lat == 0 || lng == 0) {
+							continue;
+						}
+						if ( isNaN(lat) || isNaN(lng) ) {
+							continue;
+						}
+						
+						var llarray = new Array();
+						llarray.push(lat);
+						llarray.push(lng);
+						ps.push(llarray);			
+					}
+					
+					var t = '';
+					for (var i=0; i<ps.length; i++) {
+						var p = ps[i];
+						t += ', ' + p[0] + ' ' + p[1];
+					}
+
+
+					
+					try {
+						var option = {color: colorIn, fillColor:fillColorIn, weight:1 };
+						_polygon.push(L.polygon(ps, option).addTo(map));
+					} catch (err) {
+						showMessage(err.message)
+					}
+				}
+
+				function showMessage(t) {
+					$("#message").html(t);
+				}
+				
+				function getServerURL() {
+					var u = 'http://75.101.129.49/rest/findallpoi/results.json?Data.ClientId='+"#{id}";
+					
+					return u;
+				}
+				
+				function viewRawData() {
+					if ( _lat == 0 || _lng == 0 ) {
+						return;
+					}
+					var url = getServerURL();
+					url += '&Data.lat=' + _lat;
+					url += '&Data.lon=' + _lng;
+					
+					window.open(url, "popupWindow", "width=600,height=600,scrollbars=yes");
+				}
+
+				function setMapCenter(id){
+					if(id==1)
+						map.setView([33.030991,-96.832166], 14);
+					if(id==2)
+						map.setView([32.898182,-97.040863], 14);
+					if(id==3)
+						map.setView([32.989336,-96.750348], 14);
+					if(id==4)
+						map.setView([32.786905,-96.806535], 14);
+
+					$("#message").empty();
+					$("#raw").empty();	
+				}
+
+
+
+
+
+	
+	
+	
+
+	

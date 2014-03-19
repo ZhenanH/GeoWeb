@@ -1,0 +1,104 @@
+doctype html
+html(style="height:100%")
+	head
+		title #{title} - Heatmap
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+		link(rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css")
+		script(src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js")
+		script(src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet-src.js")
+		script(src="javascripts/heatmap.js")
+		script(src="javascripts/heatmap-leaflet.js")
+		link(rel="stylesheet"  href='http://getbootstrap.com/assets/css/docs.min.css')
+
+
+	body(style="height: 100%")
+		#map(style="position:static !important; height:100%")
+
+	script(type='text/javascript').
+		var map = L.map('map',{zoomControl:true});
+					
+		map.setView([33.030991,-96.832166], 5);
+
+		tileLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/alastaircoote.map-n7irpmld/{z}/{x}/{y}.png',
+							{
+								maxZoom : 19
+							});
+
+		tileLayer.addTo(map);
+		sttileLayer = L.tileLayer('http://{s}.tiles.mapbox.com/v3/alastaircoote.map-rjqv06av/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			zIndex: 100
+		});
+
+		sttileLayer.addTo(map);
+
+		var heatmapLayer = L.TileLayer.heatMap({
+					radius: 20,
+					opacity: 0.8,
+					gradient: {
+						0.45: "rgb(0,0,255)",
+						0.55: "rgb(0,255,255)",
+						0.65: "rgb(0,255,0)",
+						0.95: "yellow",
+						1.0: "rgb(255,0,0)"
+					}
+				});
+	
+		var latlngs = [];
+		var heatPoints = [];
+		var heatData = {
+			max:10000,
+			data: heatPoints
+		};
+		
+
+		var parameter = "";
+		if(getURLParameter('Data.user_in')!=null)
+			parameter = "Data.user_in="+getURLParameter('Data.user_in')+"&Data.action_in="+getURLParameter('Data.action_in');
+
+
+		$.ajax({
+			url : "http://75.101.129.49/rest/music_sample/results.json?"+parameter,
+			dataType : 'json',
+			data : {url:""},
+			success : function(result) {
+				for(point in result.Output)
+				{	
+					userPoint = {};
+					userPoint.lat = result.Output[point].lat;
+					userPoint.lon = result.Output[point].lng;
+					userPoint.value = 1;
+					heatPoints.push(userPoint);
+					latlngs.push(L.latLng(result.Output[point].lat, result.Output[point].lng));
+					drawMarker(result.Output[point].lat, result.Output[point].lng);
+				}
+				
+				heatmapLayer.addData(heatPoints);
+				heatmapLayer.addTo(map);
+
+				drawPolyline(latlngs);
+			},
+			fail : null
+		});
+
+		function getURLParameter(name) {
+			return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+		}
+
+		function drawPolyline(latlngs){
+			
+			// create a red polyline from an arrays of LatLng points
+			var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+
+			// zoom the map to the polyline
+			map.fitBounds(polyline.getBounds());
+		}
+
+		function drawMarker(lat,lon){
+			var marker = L.marker([lat, lon]).addTo(map).bindPopup(lat+", "+lon).openPopup();
+		}
