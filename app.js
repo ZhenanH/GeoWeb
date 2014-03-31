@@ -2,7 +2,7 @@
 /**
  * Module dependencies.
  */
-
+require('express-namespace');
 var express = require('express');
 var request = require('request');
 var routes = require('./routes');
@@ -33,18 +33,37 @@ app.get('/', function(req,res){
 	res.render('index',{title:'Home'});
 });
 
-app.get('/web', function(req,res){
+app.namespace('/demo',function(){
 
-	res.render('web_demo',{
-
+	app.get('/', function(req,res){
+		res.render('index',{title:'Home'});
 	});
-});
 
-app.get('/mobile', function(req,res){
+	app.get('/mobile', function(req,res){
 	res.render('mobile_demo',{
 		title:'Home'
+		});
 	});
+
+	app.get('/web', function(req,res){
+
+		res.render('web_demo',{
+
+		});
+	});
+
+	app.get('/landing', function(req,res){
+
+		res.render('landing',{
+
+		});
+	});
+
+
 });
+
+
+
 
 app.get('/api', function(req,res){
 	 console.log(req.query.url);
