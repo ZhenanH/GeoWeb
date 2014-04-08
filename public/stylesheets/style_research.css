@@ -1,0 +1,78 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+
+
+.addButton {
+	height:60px;
+	opacity: 0.5;
+	cursor:pointer;
+}
+
+.addButton:hover {
+	opacity: 1
+}
+
+.dialog { 
+	-webkit-box-shadow:0 5px 15px rgba(0,0,0,0.5); 
+	box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+	border-radius: 6px;
+	display: none;
+    background: white; 
+    border: 1px solid;
+    border-color: rgba(0,0,0,0.2);  
+    outline: 0;
+}
+  
+.dialog-header {
+	background-color: #e1e1e8;
+	padding:5px;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	font-weight: bold;
+}   
+
+.dialog-body{
+	padding:5px;
+}    
+
+.dialog-footer{
+	padding:5px;
+}
+
+.dropdownlist{
+	margin-bottom: 5px;
+	margin-top: 5px;
+	border: 1px solid rgba(0,0,0,0.2);
+	width:100%;
+}
+
+.taskinput{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.dialog-footer button{
+	margin:5px;
+}
+
+.taskTitle {
+	color:#428bca;
+	font-weight: bold;
+}
+
+.s{
+	display: none;
+}
+
+.appPanel{
+	margin:5px;
+}
+
+#appDialog{
+	top:400px;
+	position: fixed;
+	padding-right: 0px;
+	padding-left:0px;
+}

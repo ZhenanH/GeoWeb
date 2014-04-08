@@ -63,6 +63,24 @@ app.namespace('/demo',function(){
 });
 
 
+app.namespace('/research',function(){
+
+	app.get('/', function(req,res){
+		res.render('discover',{
+		title:'Discover'
+		});
+
+	});
+
+	app.get('/discover', function(req,res){
+		res.render('discover',{
+		title:'Discover'
+		});
+	});
+
+
+});
+
 
 
 app.get('/api', function(req,res){
@@ -82,6 +100,17 @@ app.get('/pbapi',function(req,res){
     	res.end(body);
   		}
 	})
+});
+
+app.post('/sendLog',function(req,res){
+		 console.log(req.body.data);
+
+	// 	 request(req.query.url, function (error, response, body) {
+	//   		if (!error && response.statusCode == 200) {
+	//     	//console.log(body) // Print the google web page.
+	//     	res.end(body);
+	//   }
+	// })
 });
 
 
