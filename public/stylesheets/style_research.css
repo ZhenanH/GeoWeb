@@ -76,3 +76,35 @@ body {
 	padding-right: 0px;
 	padding-left:0px;
 }
+
+.phoneImg{
+	height:200px;
+}
+
+.method{
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.method:hover {
+	opacity: 1
+}
+
+#usingSmartphone {
+	display: none;
+}
+
+#usingOther {
+	display: none;
+}
+
+#researchFooter {
+	display: none;
+}
+
+#progressIndicator{
+	position: fixed;
+	top:80px;
+	left:50px;
+	width:200px;
+}

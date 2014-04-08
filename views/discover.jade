@@ -3,46 +3,98 @@ extends imagitas_layout
 block content
 	.container
 		.row.col-md-8.col-md-offset-2
-			h2.page-header How do you discover a new place by smartphone?
+			h2.page-header How do you get familiar with a new place?
+			.row
+				.col-md-5.method#leftBlock
+					img.phoneImg.center-block(src="../images/research/iphone.png", onclick="showSmartphone()")
+					h4.text-center I used a smartphone
 
-			h4 What tasks were you trying to accomplish?
-			.addPanel.highlight
-				img.addButton(src="../images/research/add.png", onclick="openTaskDialog()")
-				.dialog#taskDialog
-					.dialog-header Add an task
-					.dialog-body 
-						select.dropdownlist(onchange="getSelectVal(this)")
-							option(value="shop") Find place for shop
-							option(value="food") Find place for food
-							option(value="fun") Find place for fun
-							option(value="other") Other task
-					.dialog-footer
-						button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
-						button.btn.btn-default.btn-sm.btn-primary(onclick="addTask()") Add
-						span.s Task already added, please pick another one
-						span.s#blankAlert Please enter a name 
+				.col-md-5.method#rightBlock
+					img.phoneImg.center-block(src="../images/research/noiphone.png", onclick="showOther()")
+					h4.text-center I didn't used a smartphone
 
-				.dialog#appDialog.col-md-5(data-spy="affix",data-offset-top="400", data-offset-bottom="200")
-					.dialog-header Add an application
-					.dialog-body 
-						select.dropdownlist(onchange="getSelectApp(this)")
-							option(value="shop") Maps
-							option(value="food") Browser
-							option(value="fun") Yelp
-							option(value="other") Your other faverite application
-					.dialog-footer
-						button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
-						button.btn.btn-default.btn-sm.btn-primary(onclick="addApp(this)") Add
-						span.s#duplicatedAlert Application already added, please pick another one
-						span.s#blankAlert Please enter a name 
-			#meat
+			#usingOther
+				h4.page-header Why you didn't use a smartphone?
+				textarea.form-control
+				br
+				h4.page-header What alternertives did you use?
+				textarea.form-control
 
+				
+			#usingSmartphone
+				#progressIndicator
+					span Thanks for helping us collect data for research
+					.progress.progress-striped.active
+						.progress-bar(rol="progressbar", aria-valuenow="10", aria-valuemin="0", aria-valuemax="100", style="width:10%")
+							
+				h4.page-header Please tell us how you were using your smartphone to discover a new place
+
+				h4 What tasks were you trying to accomplish?
+				.addPanel.highlight
+					img.addButton(src="../images/research/add.png", onclick="openTaskDialog()")
+					.dialog#taskDialog
+						.dialog-header Add an task
+						.dialog-body 
+							select.dropdownlist(onchange="getSelectVal(this)")
+								option(value="shop") Find place for shop
+								option(value="food") Find place for food
+								option(value="fun") Find place for fun
+								option(value="other") Other task
+						.dialog-footer
+							button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
+							button.btn.btn-default.btn-sm.btn-primary(onclick="addTask()") Add
+							span.s Task already added, please pick another one
+							span.s#blankAlert Please enter a name 
+
+					.dialog#appDialog.col-md-5(data-spy="affix",data-offset-top="400")
+						.dialog-header Add an application
+						.dialog-body 
+							select.dropdownlist(onchange="getSelectApp(this)")
+								option(value="shop") Maps
+								option(value="food") Browser
+								option(value="fun") Yelp
+								option(value="other") Your other faverite application
+						.dialog-footer
+							button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
+							button.btn.btn-default.btn-sm.btn-primary(onclick="addApp(this)") Add
+							span.s#duplicatedAlert Application already added, please pick another one
+							span.s#blankAlert Please enter a name 
+				#meat
+
+			#researchFooter
+				br
+				#submtResult.center-block
+					span If you want to be included for the follow up research, please leave your email.
+					.input-group
+						input.form-control(type="text",placeholder="email(optional)")
+						span.input-group-btn
+							button.btn.btn-primary(type="button") Submit
 
 
 
 	script(type='text/javascript').
 		var addedTask = [];
 		var addedApp = [];
+
+		function increaseBar(x){
+			var p = $(".progress-bar").width();
+			$(".progress-bar").css("width",p+10*x);
+		}
+
+		function showSmartphone(){
+			$("#leftBlock").css({opacity:1});
+			$("#usingSmartphone").show();
+			$("#usingOther").hide();
+			$("#rightBlock").css({opacity:0.3});
+		}
+
+		function showOther(){
+			$("#leftBlock").css({opacity:0.3});
+			$("#usingSmartphone").hide();
+			$("#usingOther").show();
+			$("#rightBlock").css({opacity:1});
+			$("#researchFooter").show();
+		}
 
 		function getSelectVal(sel){
 			$(".s").hide();
@@ -82,7 +134,6 @@ block content
 			$(".dialog").hide();
 			$(".s").hide();
 
-
 		}
 
 		function addTask(){
@@ -102,6 +153,7 @@ block content
 				$("#meat").prepend('<div id="'+divID+'" class="panel panel-default"><div class="panel-heading">What applications were you using for <span class="taskTitle">'+taskTtile+'</spam>?</div><div class="panel-body"><img class="addButton" onclick="openAppDialog(this)" src="../images/research/add.png"/></div></div>');
 				$("#taskDialog").undim();
 				$("#taskDialog").hide();
+				increaseBar(2);
 			}else{
 				$(".s").show();
 			}
@@ -118,13 +170,16 @@ block content
 			}
 
 			//check duplicated
-			if(addedApp.indexOf(appTtile)==-1){
-				addedApp.push(appTtile);
+			if(addedApp.indexOf(appTtile+"_"+$(btn).parent().parent().attr("divID"))==-1){
+				addedApp.push(appTtile+"_"+$(btn).parent().parent().attr("divID"));
 				$("#"+$(btn).parent().parent().attr("divID")).append('<div class="highlight appPanel"><div class="panel-body row"><div class="col-md-2"><img class="addButton center-block"  src="../images/research/appicon.png"/><h6 class="text-center">'+appTtile+'</h6></div><div class="col-md-9"><div class="input-group"><span class="input-group-addon">Key Features</span><input type="text" class="form-control" placeholder="What are the key features helped you?"></div><br><div class="input-group"><span class="input-group-addon"> Litmitations </span><input type="text" class="form-control" placeholder="What things are missing?"></div></div></div></div>');
 				$("#appDialog").undim();
 				$("#appDialog").hide();
+				increaseBar(1);
 			}else{
 				$("#duplicatedAlert").show();
 			}
+
+			$("#researchFooter").show();
 		}
 
