@@ -71,14 +71,14 @@ body {
 }
 
 #appDialog{
-	top:400px;
+	top:2å00px;
 	position: fixed;
 	padding-right: 0px;
 	padding-left:0px;
 }
 
 .phoneImg{
-	height:200px;
+	height:160px;
 }
 
 .method{
@@ -107,4 +107,12 @@ body {
 	top:80px;
 	left:50px;
 	width:200px;
+}
+
+#thankyouFooter{
+	display: none;
+}
+
+.yj-component{
+	height:400px;
 }

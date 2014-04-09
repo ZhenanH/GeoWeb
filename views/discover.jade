@@ -3,7 +3,8 @@ extends imagitas_layout
 block content
 	.container
 		.row.col-md-8.col-md-offset-2
-			h2.page-header How do you get familiar with a new place?
+			h2.page-header Discovering new places
+			p Have you used smartphone to explore or discover a place you were not familiar with?
 			.row
 				.col-md-5.method#leftBlock
 					img.phoneImg.center-block(src="../images/research/iphone.png", onclick="showSmartphone()")
@@ -11,39 +12,40 @@ block content
 
 				.col-md-5.method#rightBlock
 					img.phoneImg.center-block(src="../images/research/noiphone.png", onclick="showOther()")
-					h4.text-center I didn't used a smartphone
+					h4.text-center I didn't use a smartphone
 
 			#usingOther
 				h4.page-header Why you didn't use a smartphone?
-				textarea.form-control
+				textarea.form-control#no-smartphone-reason
 				br
-				h4.page-header What alternertives did you use?
-				textarea.form-control
+				h4.page-header What alternatives did you use?
+				textarea.form-control#alternatives-ways
 
 				
 			#usingSmartphone
 				#progressIndicator
-					span Thanks for helping us collect data for research
+					span Thanks for helping us with our research
 					.progress.progress-striped.active
 						.progress-bar(rol="progressbar", aria-valuenow="10", aria-valuemin="0", aria-valuemax="100", style="width:10%")
+					span#embedded-like
 							
 				h4.page-header Please tell us how you were using your smartphone to discover a new place
 
-				h4 What tasks were you trying to accomplish?
+				h4 What things were you hoping to discover?
 				.addPanel.highlight
 					img.addButton(src="../images/research/add.png", onclick="openTaskDialog()")
 					.dialog#taskDialog
-						.dialog-header Add an task
+						.dialog-header Select from the list
 						.dialog-body 
 							select.dropdownlist(onchange="getSelectVal(this)")
-								option(value="shop") Find place for shop
-								option(value="food") Find place for food
-								option(value="fun") Find place for fun
-								option(value="other") Other task
+								option(value="shop") Find a place to shop
+								option(value="food") Find a place to eat
+								option(value="fun") Find a place for fun
+								option(value="other") Other
 						.dialog-footer
 							button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
 							button.btn.btn-default.btn-sm.btn-primary(onclick="addTask()") Add
-							span.s Task already added, please pick another one
+							span.s Already added, please pick another one
 							span.s#blankAlert Please enter a name 
 
 					.dialog#appDialog.col-md-5(data-spy="affix",data-offset-top="400")
@@ -52,8 +54,9 @@ block content
 							select.dropdownlist(onchange="getSelectApp(this)")
 								option(value="shop") Maps
 								option(value="food") Browser
-								option(value="fun") Yelp
-								option(value="other") Your other faverite application
+								option(value="yelp") Yelp
+								option(value="foursquare") Foursquare
+								option(value="other") Your other favorite application
 						.dialog-footer
 							button.btn.btn-default.btn-sm(onclick="closeDialog()") Close
 							button.btn.btn-default.btn-sm.btn-primary(onclick="addApp(this)") Add
@@ -64,15 +67,26 @@ block content
 			#researchFooter
 				br
 				#submtResult.center-block
-					span If you want to be included for the follow up research, please leave your email.
+					span If you interested in learning more about this research, please leave your email.
 					.input-group
-						input.form-control(type="text",placeholder="email(optional)")
+						input.form-control#email-input(type="text",placeholder="email(optional)")
 						span.input-group-btn
-							button.btn.btn-primary(type="button") Submit
+							button.btn.btn-primary(type="button" onclick="findAllInput()") Submit
 
+			#thankyouFooter
+				.bs-callout.bs-callout-info
+					p Thank you for particapting this research! Feel free to leave comments below and post it to yammer. You can help us by sending this to whoevery you think maybe interested in this research.
+
+			br
+			br
+			#embedded-feed(style="height:100%")
 
 
 	script(type='text/javascript').
+
+		Parse.initialize("SD7VqEfzDj67r3qNPA6F8JjokIttM1f4avshIZsY", "5E1nqrQgGBK6WmcpmjzoZoekLddSeeR3265P7bOA");
+		var user_id = new Date().getTime();
+
 		var addedTask = [];
 		var addedApp = [];
 
@@ -98,7 +112,7 @@ block content
 
 		function getSelectVal(sel){
 			$(".s").hide();
-			if($(sel).children("option").filter(":selected").text()=="Other task")
+			if($(sel).children("option").filter(":selected").text()=="Other")
 			{
 				$("#taskDialog .dialog-body").append('<input id="inputTask" type="text" class="form-control taskinput" placeholder="name your task">');
 			}
@@ -109,7 +123,7 @@ block content
 
 		function getSelectApp(sel){
 			$(".s").hide();
-			if($(sel).children("option").filter(":selected").text()=="Your other faverite application")
+			if($(sel).children("option").filter(":selected").text()=="Your other favorite application")
 			{
 				$("#appDialog .dialog-body").append('<input id="inputApp" type="text" class="form-control taskinput" placeholder="Enter the name of the application">');
 			}
@@ -139,7 +153,7 @@ block content
 		function addTask(){
 			
 			var taskTtile = $("#taskDialog .dialog-body select").children("option").filter(":selected").text();
-			if(taskTtile=="Other task"){
+			if(taskTtile=="Other"){
 				taskTtile = $("#inputTask").val();
 			}
 			if(taskTtile ==""){
@@ -149,7 +163,7 @@ block content
 			//check duplicated
 			if(addedTask.indexOf(taskTtile)==-1){
 				addedTask.push(taskTtile);
-				var divID = taskTtile.replace(/\s+/g, '');
+				var divID = taskTtile.replace(/\s+/g, '_');
 				$("#meat").prepend('<div id="'+divID+'" class="panel panel-default"><div class="panel-heading">What applications were you using for <span class="taskTitle">'+taskTtile+'</spam>?</div><div class="panel-body"><img class="addButton" onclick="openAppDialog(this)" src="../images/research/add.png"/></div></div>');
 				$("#taskDialog").undim();
 				$("#taskDialog").hide();
@@ -161,7 +175,7 @@ block content
 
 		function addApp(btn){
 			var appTtile = $("#appDialog .dialog-body select").children("option").filter(":selected").text();
-			if(appTtile=="Your other faverite application"){
+			if(appTtile=="Your other favorite application"){
 				appTtile = $("#inputApp").val();
 			}
 			if(appTtile ==""){
@@ -172,7 +186,7 @@ block content
 			//check duplicated
 			if(addedApp.indexOf(appTtile+"_"+$(btn).parent().parent().attr("divID"))==-1){
 				addedApp.push(appTtile+"_"+$(btn).parent().parent().attr("divID"));
-				$("#"+$(btn).parent().parent().attr("divID")).append('<div class="highlight appPanel"><div class="panel-body row"><div class="col-md-2"><img class="addButton center-block"  src="../images/research/appicon.png"/><h6 class="text-center">'+appTtile+'</h6></div><div class="col-md-9"><div class="input-group"><span class="input-group-addon">Key Features</span><input type="text" class="form-control" placeholder="What are the key features helped you?"></div><br><div class="input-group"><span class="input-group-addon"> Litmitations </span><input type="text" class="form-control" placeholder="What things are missing?"></div></div></div></div>');
+				$("#"+$(btn).parent().parent().attr("divID")).append('<div class="highlight appPanel"><div class="panel-body row"><div class="col-md-2"><img class="addButton center-block"  src="../images/research/appicon.png"/><h6 class="text-center">'+appTtile+'</h6></div><div class="col-md-9"><div class="input-group"><span class="input-group-addon">Key Features</span><input type="text" class="form-control data-collect" placeholder="Why do you like this app?"></div><br><div class="input-group"><span class="input-group-addon"> Limitations </span><input type="text" class="form-control" placeholder="What did not work well?"></div></div></div></div>');
 				$("#appDialog").undim();
 				$("#appDialog").hide();
 				increaseBar(1);
@@ -182,4 +196,77 @@ block content
 
 			$("#researchFooter").show();
 		}
+		//submitData();
+
+		function submitData(data){
+			var ParticipantObject = Parse.Object.extend("ParticipantObject");
+			var participantObject = new ParticipantObject();
+
+			participantObject.save(data).then(function(object) {
+			//alert("yay! it worked");
+			});
+		}
+
+
+		function findAllInput(){
+			var ifsent = false;
+			var user_data = {};
+			//for smartphone users
+			$('input.data-collect').each(function(){
+
+				user_data.user_id = user_id
+				user_data.features = $(this).val();
+				user_data.limitations = $(this).parent().parent().children(':first-child').next().next().children(':first-child').next().val();
+				user_data.app_name = $(this).parent().parent().parent().children(':first-child').children(':first-child').next().html();
+				user_data.task_name = $(this).parent().parent().parent().parent().parent().attr("id");
+				user_data.email = $("#email-input").val();
+				//alert(JSON.stringify(user_data));
+				submitData(user_data);
+				ifsent = true;
+			});
+
+			//for non smartphone users
+			user_data.no_smartphone = $("#no-smartphone-reason").val();
+			user_data.alternatives = $("#alternatives-ways").val();
+			alert($("#alternatives-ways").val());
+			if(!ifsent){
+				submitData(user_data);
+			}
+
+			$(researchFooter).remove();
+			$("#thankyouFooter").show();
+		}
+
+		yam.connect.actionButton({
+			container: "#embedded-like",
+			network: "fourleaf.com",
+			action: "like"
+		});
+
+		yam.connect.embedFeed({
+			container: "#embedded-feed",
+			feedType: "open-graph",
+			config: {
+				//header: false,
+				footer:false,
+				showOpenGraphPreview: true,
+				promptText: "Discuss on Yammer"
+			}
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
