@@ -116,3 +116,9 @@ body {
 .yj-component{
 	height:400px;
 }
+
+.promptAddTask {
+	display: none;
+	color:#428bca;
+	padding-left: 10px;
+}

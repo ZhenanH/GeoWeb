@@ -34,6 +34,7 @@ block content
 				h4 What things were you hoping to discover?
 				.addPanel.highlight
 					img.addButton(src="../images/research/add.png", onclick="openTaskDialog()")
+					span.promptAddTask add another one!
 					.dialog#taskDialog
 						.dialog-header Select from the list
 						.dialog-body 
@@ -168,6 +169,7 @@ block content
 				$("#taskDialog").undim();
 				$("#taskDialog").hide();
 				increaseBar(2);
+				$(".promptAddTask").show();
 			}else{
 				$(".s").show();
 			}
