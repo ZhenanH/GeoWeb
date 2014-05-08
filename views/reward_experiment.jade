@@ -1,0 +1,58 @@
+extends imagitas_layout
+
+block content
+	.container
+		.jumbotron
+			h1 Mover's Gifts
+			p Show us how you save money to win gift card to help you save even more!
+			p Take a picture of the coupon and the product you are buying and send the picture to <b>movers.saving@gmail.com</b>
+			
+
+		.row.text-center
+			img(src="images/research/sample.jpeg")
+			p. Tell us which way you prefer to recieve your gift card and start saving right now
+
+		.row.bs-docs-section
+			.col-lg-6
+				.options(onclick="pickOption(this)")
+					h2 $1 each picture(maxium 5)
+					p Send us pictures in one day. And you will recieve gift card immediately. Every picture will earn you $1 gift card, you will recieve  gift card up to $5 value
+					.picked
+						img(src="images/research/check.png")
+			.col-lg-6
+				.options(onclick="pickOption(this)")
+					h2 $10 for 5 pictures over 5 days
+					p Send us only one picture each day. Over the course of 5 days, you send us 5 pictures in total to revieve a $10 gift card
+					.picked
+						img(src="images/research/check.png")
+		.row
+			.input-group
+				input.form-control(type="text",placeholder="enter your email to participate")
+				span.input-group-btn
+					button.btn.btn-success(type="button") I want the gift
+
+	script(type='text/javascript').
+			function pickOption(d){
+				$(".picked").hide();
+				$(d).find(".picked").show();
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

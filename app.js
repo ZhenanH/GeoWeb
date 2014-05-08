@@ -81,6 +81,16 @@ app.namespace('/research',function(){
 
 });
 
+app.namespace('/movers',function(){
+
+	app.get('/', function(req,res){
+		res.render('reward_experiment',{
+		title:'Movers'
+		});
+	});
+
+
+});
 
 
 app.get('/api', function(req,res){

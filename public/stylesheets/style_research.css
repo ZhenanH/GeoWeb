@@ -3,7 +3,23 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.options {
+	margin:15px;
+	padding:15px;
+	border:solid 1px #e1e1e8;
+}
 
+.options:hover{
+	cursor: pointer;
+	border: solid 1px green;
+}
+
+.picked {
+	background: green;
+	padding:5px;
+	text-align: center;
+	display: none;
+}
 
 .addButton {
 	height:60px;
