@@ -38,14 +38,26 @@ block content
 						img(src="/images/research/check.png")
 		.row
 			.input-group
-				input.form-control(type="text",placeholder="enter your email to participate")
+				input.form-control#giftemail(type="email",placeholder="enter your email to participate")
 				span.input-group-btn
-					button.btn.btn-success(type="button") I want the gift
+					button.btn.btn-success(type="button", onclick="submitForGift()") I want the gift
 
 	script(type='text/javascript').
 			function pickOption(d){
 				$(".picked").hide();
 				$(d).find(".picked").show();
+			}
+
+			function submitForGift(){
+				if($("#giftemail").val()=="")
+					alert("please enter your email");
+				else{	
+				var GiftEmail = Parse.Object.extend("GiftEmail");
+				var giftEmail = new GiftEmail();
+				giftEmail.save({email: $("#giftemail").val()}).then(function(object) {
+				alert("Thanks for participating!");
+				});
+			}
 			}
 
 
