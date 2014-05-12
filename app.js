@@ -89,6 +89,18 @@ app.namespace('/movers',function(){
 		});
 	});
 
+	app.get('/gifts', function(req,res){
+		res.render('reward_experiment',{
+		title:'Movers'
+		});
+	});
+
+	app.get('/about', function(req,res){
+		res.render('about_experiment',{
+		title:'About Us'
+		});
+	});
+
 
 });
 
