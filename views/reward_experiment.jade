@@ -10,7 +10,7 @@ block content
 					a(href="/moving.html") Deals
 				li
 					a(href="/movers/about") About
-			h3.text-muted Movers Savings
+			h3.text-muted MoversSavings
 
 
 		.jumbotron(style="padding-top:5px;padding-bottom:10px")
@@ -22,17 +22,18 @@ block content
 			.col-lg-6
 				.options#option1(onclick="pickOption(this)", choice = "1")
 					h2 Send us 1 picture, get $1 
-					h2 (maximum 5)
-					p Every picture that you submit will earn you $1. You can earn up to $5.
+					p Every picture that you submit will earn you $1. You can earn up to <b>$5</b>.
 					.picked
 						img(src="/images/research/check.png")
 			.col-lg-6
 				.options(onclick="pickOption(this)",choice = "2")
 					h2 Send us 1 picture a day, get $10
-					p Send us one picture a day. Send us 5 pictures in total to receive $10.
+					p Send us one picture <b style="color:red">a</b> day. Send us 5 pictures in total to receive $10.
 					.picked
 						img(src="/images/research/check.png")
+
 		.row
+
 			.input-group
 				input.form-control#giftemail(type="email",placeholder="enter your email to participate")
 				span.input-group-btn
@@ -42,15 +43,16 @@ block content
 		br
 		br
 		
-		p <b>Here's how<b>	
-		ul(style="font-size:18px")
+		p <b style="font-size:20px">Here's how<b>	
+		ol.circles-list(style="font-size:18px")
 				li Take a picture of the coupon and product you are buying (see our example below)
 				li Send the picture to <b>movers.savings@gmail.com</b>
 				li Get a gift card to help you save even more!
-
+		
 		.row.text-center
 			img(src="/images/research/sample.jpeg")
-		
+
+		p <span style="font-size:15px">* First 20 people get the rewards, hurry up!</span>
 
 		
 
@@ -59,7 +61,6 @@ block content
 
 			function pickOption(d){
 				choice = $(d).attr("choice");
-				alert(choice);
 				$(".picked").css("background-color","#e1e1e8");
 				$(d).find(".picked").css("background-color","green");
 			}
@@ -72,11 +73,11 @@ block content
 				var GiftEmail = Parse.Object.extend("GiftEmail");
 				var giftEmail = new GiftEmail();
 				giftEmail.save({email: $("#giftemail").val(),choice:choice}).then(function(object) {
-				alert("Thanks for participating!");
+				alert("Thanks for participating! You will get an email confirmation soon.");
 				});
 			}}
 			else
-				alert("Please select one option")
+				alert("Please select a reward option")
 			}
 
 
