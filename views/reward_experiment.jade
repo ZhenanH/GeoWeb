@@ -13,27 +13,32 @@ block content
 			h3.text-muted Movers Savings
 
 
-		.jumbotron
+		.jumbotron(style="padding-top:5px;padding-bottom:10px")
 			h2 Mover's Gifts
-			p Show us how you save money to win gift card to help you save even more!
-			p Take a picture of the coupon and the product you are buying and send the picture to <b>movers.savings@gmail.com</b>
+			p Show us how you save money to win gift cards to help you save even more!
+			ul(style="font-size:18px")
+				li Take a picture of the coupon and product you are buying(see example below)
+				li Send the picture to <b>movers.savings@gmail.com</b>
+				li Get gift cards to help you save even more!
+
 			
 
 		.row.text-center
 			img(src="/images/research/sample.jpeg")
-		.bs-callout.bs-callout-info Tell us which way you prefer to recieve your gift card and start saving right now
+		.bs-callout.bs-callout-info
+			b Click below to tell us which way you prefer to recieve your gift card and start saving right now
 
 		.row.bs-docs-section
 			.col-lg-6
-				.options(onclick="pickOption(this)")
+				.options#option1(onclick="pickOption(this)", choice = "1")
 					h2 $1 each picture(maxium 5)
-					p Send us pictures in one day. And you will recieve gift card immediately. Every picture will earn you $1 gift card, you will recieve  gift card up to $5 value
+					p Every picture sent will earn you $1 gift card, you can get up to 5 gift cards.
 					.picked
 						img(src="/images/research/check.png")
 			.col-lg-6
-				.options(onclick="pickOption(this)")
+				.options(onclick="pickOption(this)",choice = "2")
 					h2 $10 for 5 pictures over 5 days
-					p Send us only one picture each day. Over the course of 5 days, you send us 5 pictures in total to revieve a $10 gift card
+					p Send us one picture each day. Over the course of 5 days you send us 5 pictures in total to receive a $10 gift card.
 					.picked
 						img(src="/images/research/check.png")
 		.row
@@ -43,21 +48,28 @@ block content
 					button.btn.btn-success(type="button", onclick="submitForGift()") I want the gift
 
 	script(type='text/javascript').
+			var choice = "-1";
+
 			function pickOption(d){
-				$(".picked").hide();
-				$(d).find(".picked").show();
+				choice = $(d).attr("choice");
+				alert(choice);
+				$(".picked").css("background-color","#e1e1e8");
+				$(d).find(".picked").css("background-color","green");
 			}
 
 			function submitForGift(){
+				if(choice != "-1"){
 				if($("#giftemail").val()=="")
 					alert("please enter your email");
 				else{	
 				var GiftEmail = Parse.Object.extend("GiftEmail");
 				var giftEmail = new GiftEmail();
-				giftEmail.save({email: $("#giftemail").val()}).then(function(object) {
+				giftEmail.save({email: $("#giftemail").val(),choice:choice}).then(function(object) {
 				alert("Thanks for participating!");
 				});
-			}
+			}}
+			else
+				alert("Please select one option")
 			}
 
 
