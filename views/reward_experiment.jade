@@ -69,10 +69,12 @@ block content
 				if(choice != "-1"){
 				if($("#giftemail").val()=="")
 					alert("please enter your email");
-				else{	
+				else{
+				var source = getUrlParameter('s');	
+
 				var GiftEmail = Parse.Object.extend("GiftEmail");
 				var giftEmail = new GiftEmail();
-				giftEmail.save({email: $("#giftemail").val(),choice:choice}).then(function(object) {
+				giftEmail.save({email: $("#giftemail").val(),choice:choice, source:source}).then(function(object) {
 				alert("Thanks for participating! You will get an email confirmation soon.");
 				});
 			}}
