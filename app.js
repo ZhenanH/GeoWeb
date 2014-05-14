@@ -30,7 +30,10 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req,res){
-	res.render('index',{title:'Home'});
+	//res.render('index',{title:'Home'});
+	res.render('reward_experiment',{
+		title:'Movers'
+		});
 });
 
 app.namespace('/demo',function(){
