@@ -31,8 +31,8 @@ if ('development' == app.get('env')) {
 
 app.get('/', function(req,res){
 	//res.render('index',{title:'Home'});
-	res.render('reward_experiment',{
-		title:'Movers'
+res.render('about_experiment',{
+		title:'About Us'
 		});
 });
 
