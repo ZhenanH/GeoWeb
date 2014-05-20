@@ -104,6 +104,12 @@ app.namespace('/movers',function(){
 		});
 	});
 
+	app.get('/remind', function(req,res){
+		res.render('remind_experiment',{
+		title:'Remind me'
+		});
+	});
+
 
 });
 

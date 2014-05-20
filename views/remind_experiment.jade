@@ -1,0 +1,88 @@
+extends imagitas_layout
+
+block content
+	.container
+		img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
+		.header
+			ul.nav.nav-pills.pull-right
+				li
+					a(href="/movers/gifts") Rewards
+				li
+					a(href="http://www.mymove.com/deals.html") Deals
+			
+
+
+		.jumbotron(style="padding-top:5px;padding-bottom:10px")
+			h2 Exclusive coupons for movers!
+			p Moving non-trivial. Don't forget saving when you are busing moving. We help you ....
+			
+
+		.row.bs-docs-section
+			.col-lg-6
+				.col-sm-3
+					img(src="http://o.rmncdn.com/thumbs/logos/h/lowes.com-coupons.png",class="img-responsive", alt="Responsive image")
+				.col-sm-8
+					h4 LOWES'S - $10 Off Orders $50+
+					p online. Expires on <b style="color:red">6/1/14</b>.
+					button.btn.btn-success(type="button") Get it
+					button.btn.btn-info(type="button") Remind me
+					
+			.col-lg-6
+				.col-sm-3
+					img(src="http://sa.aos.ask.com/us/fi/pl/ruby-tuesday-2013.gif",class="img-responsive", alt="Responsive image")
+				.col-sm-8
+					h4 RUBY TUESDAY - Buy 1 Get 1 50% Off
+					p In-Store. Expires <b style="color:red">6/3/14</b>.			
+					button.btn.btn-success(type="button") Get it
+					button.btn.btn-info(type="button") Remind me
+
+		
+
+	script(type='text/javascript').
+			var choice = "-1";
+
+			function pickOption(d){
+				choice = $(d).attr("choice");
+				$(".picked").css("background-color","#e1e1e8");
+				$(d).find(".picked").css("background-color","green");
+			}
+
+			function submitForGift(){
+				if(choice != "-1"){
+				if($("#giftemail").val()=="")
+					alert("please enter your email");
+				else{
+				var source = getUrlParameter('s');	
+
+				var GiftEmail = Parse.Object.extend("GiftEmail");
+				var giftEmail = new GiftEmail();
+				giftEmail.save({email: $("#giftemail").val(),choice:choice, source:source}).then(function(object) {
+				alert("Thanks for participating! You will get an email confirmation soon. Please follow the instruction below to get your rewards.");
+				});
+			}}
+			else
+				alert("Please select a reward option")
+			}
+
+			document.write(unescape("%3Cscript%20src='"+(document.location.protocol=='https:'?"https://cdnssl.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js":"http://cdn.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js")+"'%20type='text/javascript'%3E%3C/script%3E"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

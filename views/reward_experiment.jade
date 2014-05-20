@@ -2,24 +2,24 @@ extends imagitas_layout
 
 block content
 	.container
-		img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
+		
 		.header
 			ul.nav.nav-pills.pull-right
-				li.active
+				li
 					a(href="/movers/gifts") Rewards
 				li
 					a(href="/moving.html") Deals
-				li
-					a(href="/movers/about") About
-			h3.text-muted MoversSavings
-
+			img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
+			br
+			br
+			
 
 		.jumbotron(style="padding-top:5px;padding-bottom:10px")
 			h2 Take pictures of your coupons and we will send you a gift card
-			p Show us how you save money - get a gift card to save even more!
+			p Earn valuable gift cards in a few easy steps! Act now, available only to the first 20 respondents.
 			
-
-		.row.bs-docs-section
+		h4.steps 1. Choose how you want to get your reward.
+		.row
 			.col-lg-6
 				.options#option1(onclick="pickOption(this)", choice = "1")
 					h2 Send us 1 picture, get $1 
@@ -32,11 +32,13 @@ block content
 					p Send us one picture <b style="color:red">a</b> day. Send us 5 pictures in total to receive $10.
 					.picked
 						img(src="/images/research/check.png")
+		br
 
-		.row
+		h4.steps 2. Sign up with your email address.
+		.row.col-lg-6
 
 			.input-group
-				input.form-control#giftemail(type="email",placeholder="enter your email to participate")
+				input.form-control#giftemail(type="email",placeholder="youremail@mail.com")
 				span.input-group-btn
 					button.btn.btn-success(type="button", onclick="submitForGift()") Sign me up
 
@@ -44,15 +46,16 @@ block content
 		br
 		br
 		
-		p <b style="font-size:20px">Here's how (you have to sign up above first)<b>	
-		ol.circles-list(style="font-size:18px")
-				li Take a picture of the coupon and product you are buying (see our example below)
-				li Send the picture to <b>movers.savings@gmail.com</b>
-				li Get a gift card to help you save even more!
-		
-		.row.text-center
-			img(src="/images/research/sample.jpeg")
+		h4.steps 3. Take pictures of the coupon.
+		.row
+			img.img-responsive(src="/images/research/sample.jpeg",style="padding-left:30px" )
 
+		br 
+		br
+
+		h4.steps 4. Email your coupon photos to movers.savings@gmail.com. It's that simple! 
+		br
+		br
 		p <span style="font-size:15px">* First 20 people get the rewards, hurry up!</span>
 
 		
