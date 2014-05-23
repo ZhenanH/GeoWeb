@@ -110,6 +110,11 @@ app.namespace('/movers',function(){
 		});
 	});
 
+	app.get('/remind_options', function(req,res){
+		res.render('remind_options_experiment',{
+		title:'Remind me'
+		});
+	});
 
 });
 

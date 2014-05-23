@@ -1,0 +1,134 @@
+extends imagitas_layout
+
+block content
+	.container
+		.header
+			ul.nav.nav-pills.pull-right
+				li
+					a(href="/movers/remind") Remind
+
+
+			img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
+			br
+			br
+
+		.jumbotron(style="padding-top:5px;padding-bottom:10px")
+			h2 Select a reminder you prefer and don't miss any good deals
+			
+			
+
+
+
+		br
+		br		
+		.row.bs-docs-section			
+			.row.col-sm-5
+				.input-group
+					input.form-control#emailReminder(type="email",placeholder="youremail@mail.com")
+					span.input-group-btn
+						button.btn.btn-success(type="button", onclick="submitForEmail()") Remind me through email
+				
+		.row.bs-docs-section
+			.row.col-sm-5
+				.input-group
+					input.form-control#smsReminder(type="email",placeholder="enter cell phone: xxx-xxx-xxxx")
+					span.input-group-btn
+						button.btn.btn-success(type="button", onclick="submitForSMS()", style="width:190px") Remind me through SMS
+		
+	
+		.row.bs-docs-section.highlight(style="background-color:white")
+			.col-sm-2
+				img(src="/images/research/myreminder.png",class="img-responsive", alt="Responsive image" style="height:100px")
+			.col-sm-6
+				h4 Your mobile coupon wallet application
+				ul
+					li Get notification before expiration
+					li Get notification near the stores you have coupons for
+					li Organize all coupon in one place
+					li Your coupons are always with you in your porcket
+
+				
+			.col-sm-4
+				.options#likeapp(onclick="pickOption(this)", choice = "noapp")
+					p <b style="">Clike to get notified when it launches</b>
+					.picked
+						img(src="/images/research/check.png")
+				span		
+					img(src="/images/research/os.png", alt="Responsive image" style="height:30px") 
+					span(style="color:gray") coming soon for App store and Google Play
+
+
+	script(type='text/javascript').
+			var choice = "";
+
+			function pickOption(d){
+				var source = getUrlParameter('s');	
+				if($(d).attr("choice")== "likeapp"){
+					$(d).attr("choice","noapp");
+					choice = "noapp";
+					$(d).find(".picked").css("background-color","#e1e1e8");
+				}
+				else{
+					$(d).attr("choice","likeapp");
+					choice = "likeapp";
+					$(d).find(".picked").css("background-color","green");
+
+				}
+
+				var LikeApp = Parse.Object.extend("LikeApp");
+				var likeApp = new LikeApp();
+				likeApp.save({choice:choice, source:source}).then(function(object) {
+
+				});
+			}
+
+			function submitForEmail(){
+
+				if($("#emailReminder").val()=="")
+					alert("please enter your email");
+				else{
+				var source = getUrlParameter('s');	
+
+				var EmailReminder = Parse.Object.extend("EmailReminder");
+				var emailReminder = new EmailReminder();
+				emailReminder.save({email: $("#emailReminder").val(),choice:choice, source:source}).then(function(object) {
+				alert("Thanks for setting up an reminder!");
+				});
+			}}
+
+
+			function submitForSMS(){
+				if($("#smsReminder").val()=="")
+					alert("please enter your cell phone number");
+				else{
+				var source = getUrlParameter('s');	
+
+				var SMSReminder = Parse.Object.extend("SMSReminder");
+				var smsReminder = new SMSReminder();
+				smsReminder.save({email: $("#smsReminder").val(),choice:choice, source:source}).then(function(object) {
+				alert("Thanks for setting up an reminder!");
+				});
+			}}
+
+			document.write(unescape("%3Cscript%20src='"+(document.location.protocol=='https:'?"https://cdnssl.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js":"http://cdn.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js")+"'%20type='text/javascript'%3E%3C/script%3E"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

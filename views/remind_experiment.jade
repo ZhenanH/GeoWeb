@@ -2,19 +2,19 @@ extends imagitas_layout
 
 block content
 	.container
-		img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
 		.header
 			ul.nav.nav-pills.pull-right
 				li
-					a(href="/movers/gifts") Rewards
-				li
-					a(href="http://www.mymove.com/deals.html") Deals
-			
+					a(href="/movers/remind_options") Remind Options
 
+
+			img(src="http://www.mymove.com/content/dam/mymove/Logos/logo-mymove.png")
+			br
+			br
 
 		.jumbotron(style="padding-top:5px;padding-bottom:10px")
 			h2 Exclusive coupons for movers!
-			p Moving non-trivial. Don't forget saving when you are busing moving. We help you ....
+			p Moving is non-trivial. Don't forget saving when you are busing moving. We help you ....
 			
 
 		.row.bs-docs-section
@@ -24,8 +24,8 @@ block content
 				.col-sm-8
 					h4 LOWES'S - $10 Off Orders $50+
 					p online. Expires on <b style="color:red">6/1/14</b>.
-					button.btn.btn-success(type="button") Get it
-					button.btn.btn-info(type="button") Remind me
+					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/lowes.com?c=5851892") Get it now
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
 					
 			.col-lg-6
 				.col-sm-3
@@ -33,9 +33,27 @@ block content
 				.col-sm-8
 					h4 RUBY TUESDAY - Buy 1 Get 1 50% Off
 					p In-Store. Expires <b style="color:red">6/3/14</b>.			
-					button.btn.btn-success(type="button") Get it
-					button.btn.btn-info(type="button") Remind me
+					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://instore.thread.co/retailmenot/rubytuesday.com/offer/ADJFEAI4LVGQDGGBDIWLIRQTEE?click_id=D648F8A7-D37B-1C62-7C38-8D708F24FD88") Get it now
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
 
+		.row.bs-docs-section
+			.col-lg-6
+				.col-sm-3
+					img(src="http://o.rmncdn.com/thumbs/logos/l/target.com-coupons.jpg",class="img-responsive", alt="Responsive image")
+				.col-sm-8
+					h4 TARGET - $5 Off $50 Sitewide
+					p In-Store. Expires <b style="color:red">5/29/14</b>.			
+					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/target.com?c=5861800") Get it now
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
+
+			.col-lg-6
+				.col-sm-3
+					img(src="http://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/TheHomeDepot.svg/176px-TheHomeDepot.svg.png",class="img-responsive", alt="Responsive image")
+				.col-sm-8
+					h4 HOME DEPOT - $5 Off $50+ Sitewide
+					p In-Store. Expires <b style="color:red">5/26/14</b>.			
+					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/homedepot.com?c=5859543") Get it now
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
 		
 
 	script(type='text/javascript').
