@@ -92,7 +92,7 @@ block content
 				var EmailReminder = Parse.Object.extend("EmailReminder");
 				var emailReminder = new EmailReminder();
 				emailReminder.save({email: $("#emailReminder").val(),choice:choice, source:source}).then(function(object) {
-				alert("Thanks for setting up an reminder!");
+				alert("Thanks for setting up an reminder! We will remind you before it is expired");
 				});
 			}}
 
@@ -106,7 +106,7 @@ block content
 				var SMSReminder = Parse.Object.extend("SMSReminder");
 				var smsReminder = new SMSReminder();
 				smsReminder.save({email: $("#smsReminder").val(),choice:choice, source:source}).then(function(object) {
-				alert("Thanks for setting up an reminder!");
+				alert("Thanks for setting up an reminder! We will remind you before it is expired");
 				});
 			}}
 

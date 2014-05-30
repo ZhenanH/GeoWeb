@@ -25,7 +25,7 @@ block content
 					h4 LOWES'S - $10 Off Orders $50+
 					p Online. Expires on <b style="color:red">6/1/14</b>.
 					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/lowes.com?c=5851892") Get it now
-					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options?o=lowes") Remind me
 					
 			.col-lg-6
 				.col-sm-3
@@ -34,7 +34,7 @@ block content
 					h4 RUBY TUESDAY - Buy 1 Get 1 50% Off
 					p In-Store. Expires <b style="color:red">6/3/14</b>.			
 					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://instore.thread.co/retailmenot/rubytuesday.com/offer/ADJFEAI4LVGQDGGBDIWLIRQTEE?click_id=D648F8A7-D37B-1C62-7C38-8D708F24FD88") Get it now
-					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options?o=ruby") Remind me
 
 		.row.bs-docs-section
 			.col-lg-6
@@ -42,48 +42,27 @@ block content
 					img(src="http://o.rmncdn.com/thumbs/logos/l/target.com-coupons.jpg",class="img-responsive", alt="Responsive image")
 				.col-sm-8
 					h4 TARGET - $5 Off $50 Sitewide
-					p In-Store. Expires <b style="color:red">5/29/14</b>.			
+					p In-Store. Expires <b style="color:red">6/29/14</b>.			
 					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/target.com?c=5861800") Get it now
-					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options?o=target") Remind me
 
 			.col-lg-6
 				.col-sm-3
 					img(src="http://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/TheHomeDepot.svg/176px-TheHomeDepot.svg.png",class="img-responsive", alt="Responsive image")
 				.col-sm-8
 					h4 HOME DEPOT - $5 Off $50+ Sitewide
-					p In-Store. Expires <b style="color:red">5/26/14</b>.			
+					p In-Store. Expires <b style="color:red">6/26/14</b>.			
 					a.btn.btn-success(type="button" style="margin-right:7px" target="_blank" href="http://www.retailmenot.com/view/homedepot.com?c=5859543") Get it now
-					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options") Remind me
+					a.btn.btn-info(type="button" style="margin-right:7px" href="/movers/remind_options?o=home") Remind me
 
 		.row(style="border-top: 1px solid #ccc;padding-top:15px")
-			a.btn.btn-default(type="button" style="margin-right:7px" href="/movers/remind_options") Not interested right now, send me other coupons in the future
+			a.btn.btn-default(type="button" style="margin-right:7px" href="/movers/thanks") Not interested right now, send me other coupons in the future
 		
 
 	script(type='text/javascript').
-			var choice = "-1";
 
-			function pickOption(d){
-				choice = $(d).attr("choice");
-				$(".picked").css("background-color","#e1e1e8");
-				$(d).find(".picked").css("background-color","green");
-			}
 
-			function submitForGift(){
-				if(choice != "-1"){
-				if($("#giftemail").val()=="")
-					alert("please enter your email");
-				else{
-				var source = getUrlParameter('s');	
 
-				var GiftEmail = Parse.Object.extend("GiftEmail");
-				var giftEmail = new GiftEmail();
-				giftEmail.save({email: $("#giftemail").val(),choice:choice, source:source}).then(function(object) {
-				alert("Thanks for participating! You will get an email confirmation soon. Please follow the instruction below to get your rewards.");
-				});
-			}}
-			else
-				alert("Please select a reward option")
-			}
 
 			document.write(unescape("%3Cscript%20src='"+(document.location.protocol=='https:'?"https://cdnssl.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js":"http://cdn.clicktale.net/www07/ptc/7b940bc0-abd8-454b-ac1c-9fb607f69255.js")+"'%20type='text/javascript'%3E%3C/script%3E"));
 

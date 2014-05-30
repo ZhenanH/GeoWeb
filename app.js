@@ -116,6 +116,11 @@ app.namespace('/movers',function(){
 		});
 	});
 
+	app.get('/thanks', function(req,res){
+		res.render('thanks_experiment',{
+		title:'Remind me'
+		});
+	});
 });
 
 
