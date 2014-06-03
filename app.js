@@ -123,6 +123,14 @@ app.namespace('/movers',function(){
 	});
 });
 
+app.namespace('/mymovemobile',function(){
+
+	app.get('/brands', function(req,res){
+		res.render('mymovewallet/brands',{
+		title:'Movers'
+		});
+	});
+});
 
 app.get('/api', function(req,res){
 	 console.log(req.query.url);

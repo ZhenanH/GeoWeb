@@ -1,0 +1,17 @@
+body {
+ 
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.container {
+	margin-top:60px;
+	width:100%;
+}
+
+.multi-columns-row .col-xs-6 {
+	margin-bottom: 5px;
+}
+
+.caption h6{
+	color:gray;
+}
