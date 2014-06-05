@@ -9,8 +9,23 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var url = require('url');
 
 var app = express();
+
+
+//parse.com
+var Parse = require('node-parse-api').Parse;
+var APP_ID = "NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5"
+var MASTER_KEY = "MyDArfuQFQwY78vpLdHvjEhQVgqo4nLwrwSJYuee";
+var parse = new Parse(APP_ID, MASTER_KEY);
+// the class
+var Kaiseki = require('kaiseki');
+
+// instantiate
+
+var REST_API_KEY = 'UgC5AoX8CKHqT1EUnuZab3VNJRbEo2quAiZktXLV';
+var kaiseki = new Kaiseki(APP_ID, REST_API_KEY);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -126,7 +141,32 @@ app.namespace('/movers',function(){
 app.namespace('/mymovemobile',function(){
 
 	app.get('/brands', function(req,res){
-		res.render('mymovewallet/brands',{
+		parse.findMany('Coupons', '', function (err, response) {
+  			console.log('retreive ', response.results.length + 'coupons');
+  			res.render('mymovewallet/brands',{
+			title:'Movers',
+			couponData: response.results
+		});
+	});
+		
+	});
+
+	app.get('/mycoupons', function(req,res){
+		var url_parts = url.parse(req.url, true);
+		var userObjID = url_parts.query.userObjID;
+		console.log(userObjID);
+		kaiseki.getUser(userObjID, function(err, response, body, success) {
+  			console.log('user info = ', body);
+  			res.render('mymovewallet/mycoupons',{
+			title:'Movers',
+			thisUser:body
+			});
+		});
+		
+	});
+
+	app.get('/coupondetail', function(req,res){
+		res.render('mymovewallet/coupondetail',{
 		title:'Movers'
 		});
 	});

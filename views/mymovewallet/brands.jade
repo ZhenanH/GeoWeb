@@ -1,86 +1,124 @@
 extends mymovemobile_layout
 
+
 block content
 	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
 		.container-fluid
 			.navbar-header
-				a.navbar-brand.pull-right My Coupons
+				a.navbar-brand.pull-right(href="./mycoupons?userObjID=REe3FzHTrg") My Coupons
 
 	.container
 		.row.multi-columns-row
 			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
+				.thumbnail(onclick = "location.href='./coupondetail'")
 					img.img-responsive(src="http://www.griff.com/homedepot.png")
 					.caption
 						h4 $5 Off $50+ Sitewide
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Best_Buy_Logo.svg/300px-Best_Buy_Logo.svg.png")
-					.caption
-						h4 20% Off 1 Small Appliance In-Store & Online
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="https://www.checkpoints.com/img/stores/macys.png")
-					.caption
-						h4 Up To 75% Off Sale And Clearance Items
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
-					.caption
-						h4 Up To 70% Off Father's Day Finds 
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://www.griff.com/homedepot.png")
-					.caption
-						h4 $5 Off $50+ Sitewide
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Best_Buy_Logo.svg/300px-Best_Buy_Logo.svg.png")
-					.caption
-						h4 20% Off 1 Small Appliance In-Store & Online
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="https://www.checkpoints.com/img/stores/macys.png")
-					.caption
-						h4 Up To 75% Off Sale And Clearance Items
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
-					.caption
-						h4 Up To 70% Off Father's Day Finds 
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://www.griff.com/homedepot.png")
-					.caption
-						h4 $5 Off $50+ Sitewide
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Best_Buy_Logo.svg/300px-Best_Buy_Logo.svg.png")
-					.caption
-						h4 20% Off 1 Small Appliance In-Store & Online
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="https://www.checkpoints.com/img/stores/macys.png")
-					.caption
-						h4 Up To 75% Off Sale And Clearance Items
-					.saveButton save
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				a.thumbnail
-					img.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
-					.caption
-						h4 Up To 70% Off Father's Day Finds 
 					.saveButton save
 
+			- for (var i = 0; i < couponData.length; ++i)
+				.col-xs-6.col-sm-4.col-md-3.col-lg-3
+					.thumbnail(onclick = "location.href='./coupondetail'")
+						img.img-responsive(src=couponData[i].brandPic)
+						.caption
+							h4 #{couponData[i].couponDes}
+						.saveButton(id=couponData[i].objectId) save
+
+
+	script(type='text/javascript').
+		var userObjID = "REe3FzHTrg";
+		var userName = "6B07AADF-977E-4D6A-96BE-535AE599D418";
+		var userObjID;
+		var userName;
+		var currentUser;
+		function loginUser(){
+			currentUser = Parse.User.current();
+				if (currentUser) {
+					// do stuff with the user
+				} else {
+					// show the signup or login page
+					Parse.User.logIn(userName, "", {
+						success: function(user) {
+						// Do stuff after successful login.
+						console.log("good");
+							},
+						error: function(user, error) {
+						// The login failed. Check error to see why.
+						alert("login failed: " + JSON.stringify(error));
+							}
+						});
+				}
+			}
+
+		function checkCoupons(){
+			if(currentUser){
+				$(".saveButton").each(function(){
+					var thisSaveButton = this;
+					var User = Parse.Object.extend("User");
+						var query = new Parse.Query(User);
+						query.get(userObjID, {
+							success: function(theCurrentUser) {
+							// The object was retrieved successfully.
+							//console.log($(this).attr("id"));
+							if(theCurrentUser.get("savedCoupons").indexOf($(thisSaveButton).attr("id"))>=0){
+								$(thisSaveButton).css('background-color','#ddd').text('saved');
+								$(thisSaveButton).off('click');
+							}
+
+							},
+							error: function(object, error) {
+							// The object was not retrieved successfully.
+							// error is a Parse.Error with an error code and description.
+							alert("failed retrieving");
+							}
+						});
+
+					});
+			}
+		}
+		
+
+	script(type='text/javascript').
+
+
+		$(".saveButton").click(function(e){
+			e.stopPropagation(); 
+			var thisButton = this;
+			
+				//$(".test").text(userObjID);
+				var User = Parse.Object.extend("User");
+				var query = new Parse.Query(User);
+				query.get(userObjID, {
+					success: function(theCurrentUser) {
+					// The object was retrieved successfully.
+						var savedCoupons = theCurrentUser.get("savedCoupons");
+
+						if(savedCoupons)
+							savedCoupons.push($(thisButton).attr("id"));
+						else
+							savedCoupons = [$(thisButton).attr("id")];	
+
+						theCurrentUser.set("savedCoupons",savedCoupons);
+
+						theCurrentUser.save(null,{
+							success:function(user){
+								$(thisButton).css('background-color','#ddd').text('saved');
+								$(thisButton).off('click');
+								},
+							error: function(user,error){
+								alert(JSON.strinhgify(error));
+							}
+							});
+					},
+					error: function(object, error) {
+					// The object was not retrieved successfully.
+					// error is a Parse.Error with an error code and description.
+					alert("failed");
+					}
+				});
+
+
+			});
 
 
 
