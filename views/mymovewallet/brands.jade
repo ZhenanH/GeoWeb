@@ -8,14 +8,6 @@ block content
 				a.navbar-brand.pull-right#myCouponLink(href="./mycoupons") Saved
 
 	.container
-		.row.multi-columns-row
-			.col-xs-6.col-sm-4.col-md-3.col-lg-3
-				.thumbnail(onclick = "location.href='./coupondetail'")
-					img.img-responsive(src="http://www.griff.com/homedepot.png")
-					.caption
-						h4 $5 Off $50+ Sitewide
-					.saveButton save
-
 			- if(couponData.length>=0)
 				- for (var i = 0; i < couponData.length; ++i)
 						.col-xs-6.col-sm-4.col-md-3.col-lg-3
