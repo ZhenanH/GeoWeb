@@ -5,7 +5,7 @@ block content
 	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
 		.container-fluid
 			.navbar-header
-				a.navbar-brand.pull-right(href="./mycoupons?userObjID=REe3FzHTrg") My Coupons
+				a.navbar-brand.pull-right#myCouponLink(href="./mycoupons") My Coupons
 
 	.container
 		.row.multi-columns-row
@@ -16,14 +16,14 @@ block content
 						h4 $5 Off $50+ Sitewide
 					.saveButton save
 
-			- if(true)
-			- for (var i = 0; i < couponData.length; ++i)
-					.col-xs-6.col-sm-4.col-md-3.col-lg-3
-						.thumbnail(onclick = "location.href='./coupondetail'")
-							img.img-responsive(src=couponData[i].brandPic)
-							.caption
-								h4 #{couponData[i].couponDes}
-							.saveButton(id=couponData[i].objectId) save
+			- if(couponData.length>=0)
+				- for (var i = 0; i < couponData.length; ++i)
+						.col-xs-6.col-sm-4.col-md-3.col-lg-3
+							.thumbnail(onclick = "location.href='./coupondetail'")
+								img.img-responsive(src=couponData[i].brandPic)
+								.caption
+									h4 #{couponData[i].couponDes}
+								.saveButton(id=couponData[i].objectId) save
 
 
 	script(type='text/javascript').
@@ -53,6 +53,9 @@ block content
 
 		function checkCoupons(){
 			if(currentUser){
+				//update my coupon link
+				$("#myCouponLink").attr("href","./mycoupons?userObjID="+userObjID);
+				//check saved coupon
 				$(".saveButton").each(function(){
 					var thisSaveButton = this;
 					var User = Parse.Object.extend("User");

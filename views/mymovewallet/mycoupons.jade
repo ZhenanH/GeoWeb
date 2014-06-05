@@ -9,15 +9,18 @@ block content
 
 	.container
 		.row
-			- for (var i = 0; i < thisUser.savedCoupons.length; ++i)
-				.col-xs-12
-					a.thumbnail(id=thisUser.savedCoupons[i])
-						.row 
-							.col-xs-3
-								img.img-responsive
-							.col-xs-9
-								.caption
-									h4 $5 Off $50+ Sitewide
+			- if(thisUser.savedCoupons)
+				- for (var i = 0; i < thisUser.savedCoupons.length; ++i)
+					.col-xs-12
+						a.thumbnail(id=thisUser.savedCoupons[i])
+							.row 
+								.col-xs-3
+									img.img-responsive
+								.col-xs-9
+									.caption
+										h4 $5 Off $50+ Sitewide
+			- else
+				p(style="text-align:center") No saved coupons
 								
 
 	script(type='text/javascript').
