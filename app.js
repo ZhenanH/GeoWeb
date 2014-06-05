@@ -143,11 +143,12 @@ app.namespace('/mymovemobile',function(){
 	app.get('/brands', function(req,res){
 		parse.findMany('Coupons', '', function (err, response) {
   			console.log('retreive ', response.results.length + 'coupons');
+  			console.log("shit: "+JSON.stringify(response.results));
   			res.render('mymovewallet/brands',{
-			title:'Movers',
-			couponData: response.results
+				title:'Movers',
+				couponData: response.results
+			});
 		});
-	});
 		
 	});
 
