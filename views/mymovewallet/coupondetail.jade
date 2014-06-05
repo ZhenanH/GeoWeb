@@ -16,7 +16,14 @@ block content
 					.saveButton Save
 			
 
-
+	script(type='text/javascript').
+		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
+		//console.log(currentCoupon);
+		$(".thumbnail").each(function(){
+				$(this).find("img").attr("src",currentCoupon.brandPic);
+				$(this).find("h4").text(currentCoupon.couponDes);
+			});
+		
 
 
 

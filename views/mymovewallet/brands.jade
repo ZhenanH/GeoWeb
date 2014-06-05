@@ -53,6 +53,7 @@ block content
 
 		function checkCoupons(){
 			if(currentUser){
+
 				//update my coupon link
 				$("#myCouponLink").attr("href","./mycoupons?userObjID="+userObjID);
 				//check saved coupon
@@ -83,9 +84,35 @@ block content
 		
 
 	script(type='text/javascript').
+		$(".thumbnail").click(function(e){
+			//alert("click");
+			var allCoupon = !{JSON.stringify(couponData)};
+			//save all coupon data in session
+			var thisCouponId =  $(this).find('.saveButton').attr("id");
+			//console.log(JSON.stringify(allCoupon));
+			
+			var searchResult = $.grep(allCoupon, function(e){ console.log(e.objectId+" : "+thisCouponId); return e.objectId == thisCouponId; });
+			var currentCoupon;
 
+			if (searchResult.length == 0) {
+			// not found
+				//alert("not found");
+			} else if (searchResult.length == 1) {
+			// access the foo property using result[0].foo
+				//alert("1 found");
+				console.log("found: "+searchResult[0]);
+				currentCoupon = searchResult[0];
+				sessionStorage.setItem("current_coupon", JSON.stringify(currentCoupon));
+			} else {
+			// multiple items found
+				//alert("more found: "+JSON.stringify(searchResult));
+
+			}
+			});
 
 		$(".saveButton").click(function(e){
+			
+			
 			e.stopPropagation(); 
 			var thisButton = this;
 			
