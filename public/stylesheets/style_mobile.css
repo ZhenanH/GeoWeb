@@ -7,6 +7,10 @@ body {
  text-decoration: none;
 }
 
+.navbar-inverse{
+	background-color:rgba(2,2,2,0.9) !important;
+
+}
 
 .container {
 	margin-top:60px;
