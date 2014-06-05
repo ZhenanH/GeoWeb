@@ -15,14 +15,15 @@ block content
 					.caption
 						h4 $5 Off $50+ Sitewide
 					.saveButton save
-
-			- for (var i = 0; i < couponData.length; ++i)
-				.col-xs-6.col-sm-4.col-md-3.col-lg-3
-					.thumbnail(onclick = "location.href='./coupondetail'")
-						img.img-responsive(src=couponData[i].brandPic)
-						.caption
-							h4 #{couponData[i].couponDes}
-						.saveButton(id=couponData[i].objectId) save
+					
+			- if(couponData)
+				for (var i = 0; i < couponData.length; ++i)
+					.col-xs-6.col-sm-4.col-md-3.col-lg-3
+						.thumbnail(onclick = "location.href='./coupondetail'")
+							img.img-responsive(src=couponData[i].brandPic)
+							.caption
+								h4 #{couponData[i].couponDes}
+							.saveButton(id=couponData[i].objectId) save
 
 
 	script(type='text/javascript').
