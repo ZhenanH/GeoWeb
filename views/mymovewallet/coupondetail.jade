@@ -13,15 +13,17 @@ block content
 					img.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
 					.caption
 						h4 Up To 70% Off Father's Day Finds 
+					.couponCodes No code needed
 					.saveButton Save
 			
 
 	script(type='text/javascript').
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
-		//console.log(currentCoupon);
+		//alert(currentCoupon);
 		$(".thumbnail").each(function(){
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
+				$(this).find(".couponCodes").text(currentCoupon.couponCode);
 			});
 		
 
