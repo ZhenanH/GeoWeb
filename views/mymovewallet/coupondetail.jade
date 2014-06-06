@@ -14,7 +14,6 @@ block content
 					.caption
 						h4 Up To 70% Off Father's Day Finds 
 					.couponCodes No code needed
-					.saveButton Save
 			
 
 	script(type='text/javascript').
@@ -24,6 +23,9 @@ block content
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
 				$(this).find(".couponCodes").text(currentCoupon.couponCode);
+				if(sessionStorage.getItem("is_saved")=="unSaved")
+					$(this).append("<div class='saveButton'>Save</div>");
+
 			});
 		
 

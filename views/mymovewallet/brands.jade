@@ -11,7 +11,7 @@ block content
 			- if(couponData.length>=0)
 				- for (var i = 0; i < couponData.length; ++i)
 						.col-xs-6.col-sm-4.col-md-3.col-lg-3
-							.thumbnail(onclick = "location.href='./coupondetail'")
+							.thumbnail(onclick = "location.href='./coupondetail'", isSaved = "unSaved")
 								img.img-responsive(src=couponData[i].brandPic)
 								.caption
 									h4 #{couponData[i].couponDes}
@@ -60,8 +60,8 @@ block content
 							if(theCurrentUser.get("savedCoupons").indexOf($(thisSaveButton).attr("id"))>=0){
 								$(thisSaveButton).css('background-color','#ddd').text('saved');
 								$(thisSaveButton).off('click');
+								$(thisSaveButton).parent().attr('isSaved','saved');
 							}
-
 							},
 							error: function(object, error) {
 							// The object was not retrieved successfully.
@@ -77,7 +77,10 @@ block content
 
 	script(type='text/javascript').
 		$(".thumbnail").click(function(e){
-			//alert("click");
+
+			//marked saved coupons
+			sessionStorage.setItem("is_saved", $(this).attr("isSaved"));
+
 			var allCoupon = !{JSON.stringify(couponData)};
 			//save all coupon data in session
 			var thisCouponId =  $(this).find('.saveButton').attr("id");
@@ -142,6 +145,9 @@ block content
 
 
 			});
+
+		//loginUser();
+		//checkCoupons();
 
 
 
