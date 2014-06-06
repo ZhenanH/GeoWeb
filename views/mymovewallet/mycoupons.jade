@@ -4,7 +4,7 @@ block content
 	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
 		.container-fluid
 			.navbar-header
-				a.navbar-brand.pull-left(href="./brands") Back
+				a.navbar-brand.pull-left(onclick="window.history.back()") Back
 
 
 	.container
@@ -32,6 +32,11 @@ block content
 						query.get(couponID, {
 							success: function(coupon) {
 							// The object was retrieved successfully.
+
+							$(thisCoupon).attr("href","./savedcoupondetail");
+							$(thisCoupon).click(function(e){
+								sessionStorage.setItem("current_coupon", JSON.stringify(coupon));	
+								});
 							
 							$(thisCoupon).find("img").attr("src",coupon.get("brandPic"));
 							$(thisCoupon).find("h4").text(coupon.get("couponDes"));

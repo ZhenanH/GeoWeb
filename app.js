@@ -170,6 +170,12 @@ app.namespace('/mymovemobile',function(){
 		title:'Movers'
 		});
 	});
+
+	app.get('/savedcoupondetail', function(req,res){
+		res.render('mymovewallet/savedcoupondetail',{
+		title:'Movers'
+		});
+	});
 });
 
 app.get('/api', function(req,res){
