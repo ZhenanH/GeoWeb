@@ -28,12 +28,14 @@ block content
 			currentUser = Parse.User.current();
 				if (currentUser) {
 					// do stuff with the user
+					sessionStorage.setItem("userID",userObjID );
 				} else {
 					// show the signup or login page
 					Parse.User.logIn(userName, "", {
 						success: function(user) {
 						// Do stuff after successful login.
-						console.log("good");
+						console.log("save use object id");
+						sessionStorage.setItem("userID", userObjID);
 							},
 						error: function(user, error) {
 						// The login failed. Check error to see why.

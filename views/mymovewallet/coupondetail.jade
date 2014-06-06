@@ -24,11 +24,50 @@ block content
 				$(this).find("h4").text(currentCoupon.couponDes);
 				$(this).find(".couponCodes").text(currentCoupon.couponCode);
 				if(sessionStorage.getItem("is_saved")=="unSaved")
-					$(this).append("<div class='saveButton'>Save</div>");
+					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"''>Save</div>");
 
 			});
 		
 
+		$(".saveButton").click(function(e){
+			
+	
+			var thisButton = this;
+			
+				//$(".test").text(userObjID);
+				var User = Parse.Object.extend("User");
+				var query = new Parse.Query(User);
+				query.get(sessionStorage.getItem("userID"), {
+					success: function(theCurrentUser) {
+					// The object was retrieved successfully.
+						var savedCoupons = theCurrentUser.get("savedCoupons");
+
+						if(savedCoupons)
+							savedCoupons.push($(thisButton).attr("id"));
+						else
+							savedCoupons = [$(thisButton).attr("id")];	
+
+						theCurrentUser.set("savedCoupons",savedCoupons);
+
+						theCurrentUser.save(null,{
+							success:function(user){
+								$(thisButton).css('background-color','#ddd').text('saved');
+								$(thisButton).off('click');
+								},
+							error: function(user,error){
+								alert(JSON.strinhgify(error));
+							}
+							});
+					},
+					error: function(object, error) {
+					// The object was not retrieved successfully.
+					// error is a Parse.Error with an error code and description.
+					alert("download the MyMove app to save coupons");
+					}
+				});
+
+
+			});
 
 
 
