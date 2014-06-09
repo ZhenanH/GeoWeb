@@ -142,7 +142,8 @@ app.namespace('/mymovemobile',function(){
 
 	app.get('/brands', function(req,res){
 		parse.findMany('Coupons', '', function (err, response) {
-  			console.log('retreive ', response.results.length + 'coupons');
+			if(response)
+  				console.log('retreive ', response.results.length + 'coupons');
   			res.render('mymovewallet/brands',{
 				title:'Movers',
 				couponData: response.results
