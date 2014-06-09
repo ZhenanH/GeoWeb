@@ -13,7 +13,7 @@ var url = require('url');
 
 var app = express();
 
-
+ 
 //parse.com
 var Parse = require('node-parse-api').Parse;
 var APP_ID = "NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5"
@@ -43,6 +43,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+});
 
 app.get('/', function(req,res){
 	//res.render('index',{title:'Home'});
