@@ -87,6 +87,14 @@ body {
 	padding-bottom: 5px;
 	
 }
+
+.col-xs-12 > a{
+	color:#ddd;
+}
+
+.col-xs-4 > .thumbnail{
+	border: 0px;
+}
 /*
  * Off Canvas
  * --------------------------------------------------
