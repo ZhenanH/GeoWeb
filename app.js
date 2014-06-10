@@ -145,6 +145,10 @@ app.namespace('/movers',function(){
 
 app.namespace('/mymovemobile',function(){
 
+	app.get('/landing', function(req,res){
+		res.redirect('/mymovemobile/brands');	
+	});
+
 	app.get('/brands', function(req,res){
 		parse.findMany('Coupons', '', function (err, response) {
 			if(response)

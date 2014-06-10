@@ -1,6 +1,7 @@
 extends mymovemobile_layout
 
 block content
+	div(style="height:50px; clear:both")
 	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
 		.container-fluid
 			.navbar-header
@@ -44,7 +45,7 @@ block content
 							error: function(object, error) {
 							// The object was not retrieved successfully.
 							// error is a Parse.Error with an error code and description.
-							alert("failed retrieving coupon");
+							console.log("failed retrieving coupon");
 							}
 						});
 			

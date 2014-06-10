@@ -1,6 +1,12 @@
 body {
   display:none;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #eee !important;
+}
+
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; /* Disable selection/copy in UIWebView */
 }
 
 .container a:hover{
@@ -13,7 +19,7 @@ body {
 }
 
 .container {
-	padding-top:60px;
+	padding-top:25px;
 	width:100%;
 }
 
@@ -50,7 +56,7 @@ body {
 }
 
 .brandPage{
-	background-color: #eee;
+	background-color: #eee !important;
 }
 
 
