@@ -9,7 +9,7 @@ html
 		link(rel="stylesheet" href="http://getbootstrap.com/assets/css/docs.min.css")
 		link(rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css")
 		link(rel="stylesheet" href="/stylesheets/navmenu-reveal.css")
-		meta(name="viewport" content="width=device-width, initial-scale=1")
+		meta(name="viewport" content="width=device-width, user-scalable=no initial-scale=1")
 		meta(property="og:title" content="MyMoveWallet")
 		meta(property="og:type" content="website")
 		meta(property="og:url" content="http://www.pbsmartlab.com/mobile")
@@ -43,9 +43,24 @@ html
 		script(src="/javascripts/ie-row-fix.js")
 		
 		script(type='text/javascript').
-
+			function preventDefault(e) { e.preventDefault(); };
+			var isEnableTouch = true;
 			$(document).ready(function () {
 				$('body').fadeIn("fast");
+
+				//offcanvas
+				$('[data-toggle=offcanvas]').click(function () {
+					$('.row-offcanvas').toggleClass('active')
+					if(isEnableTouch){
+						isEnableTouch=!isEnableTouch;
+						document.addEventListener('touchmove', preventDefault, false);
+						}
+					else{
+						isEnableTouch=!isEnableTouch;
+						document.removeEventListener('touchmove', preventDefault, false);
+						}
+					
+				});
 			});
 
 			function getUrlParameter(sParam)
@@ -96,4 +111,3 @@ html
 		
 
 
-		
