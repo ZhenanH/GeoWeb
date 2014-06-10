@@ -127,6 +127,7 @@ block content
 							success:function(user){
 								$(thisButton).css('background-color','#ddd').text('saved');
 								$(thisButton).off('click');
+								$("#savedCouponCount").text(savedCoupons.length);
 								},
 							error: function(user,error){
 								alert(JSON.strinhgify(error));
