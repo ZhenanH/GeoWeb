@@ -9,6 +9,7 @@ block content
 				a Coupons for movers
 			li
 				a#myCouponLink(href="./mycoupons") Saved Coupons
+					span.badge.pull-right#savedCouponCount 0
 
 	.canvas.canvas-slide
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
@@ -33,7 +34,7 @@ block content
 
 	script(type='text/javascript').
 
-		
+
 		function checkCoupons(){
 			if(sessionStorage.getItem("userID")){
 
@@ -49,7 +50,11 @@ block content
 							success: function(theCurrentUser) {
 							// The object was retrieved successfully.
 							//console.log($(this).attr("id"));
-							if(theCurrentUser.get("savedCoupons").indexOf($(thisSaveButton).attr("id"))>=0){
+							var mySavedCoupons = theCurrentUser.get("savedCoupons");
+							if(mySavedCoupons.length>=0)
+								$("#savedCouponCount").text(mySavedCoupons.length);
+
+							if(mySavedCoupons.indexOf($(thisSaveButton).attr("id"))>=0){
 								$(thisSaveButton).css('background-color','#ddd').text('saved');
 								$(thisSaveButton).off('click');
 								$(thisSaveButton).parent().attr('isSaved','saved');

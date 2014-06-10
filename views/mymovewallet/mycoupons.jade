@@ -13,43 +13,120 @@ block content
 			- if(thisUser.savedCoupons)
 				- for (var i = 0; i < thisUser.savedCoupons.length; ++i)
 					.col-xs-12
-						a.thumbnail(id=thisUser.savedCoupons[i])
+						a.thumbnail.couponThumbnail(id=thisUser.savedCoupons[i])
 							.row 
-								.col-xs-3
-									img.img-responsive
-								.col-xs-9
+								.col-xs-4
+									.thumbnail
+										img#brandPic
+								.col-xs-8
 									.caption
-										h4 $5 Off $50+ Sitewide
+										h4.couponDes $5 Off $50+ Sitewide
+									#expireDate 
+
 			- else
 				p(style="text-align:center") No saved coupons
 								
 
 	script(type='text/javascript').
-		$(".thumbnail").each(function(){
+		var couponIDList = [];
+		$(".thumbnail.couponThumbnail").each(function(){
 			var thisCoupon = this;
 			var couponID = $(this).attr("id");
-			var Coupons = Parse.Object.extend("Coupons");
-						var query = new Parse.Query(Coupons);
-						query.get(couponID, {
-							success: function(coupon) {
-							// The object was retrieved successfully.
+			couponIDList.push(couponID);
+		});
 
-							$(thisCoupon).attr("href","./savedcoupondetail");
-							$(thisCoupon).click(function(e){
-								sessionStorage.setItem("current_coupon", JSON.stringify(coupon));	
-								});
-							
-							$(thisCoupon).find("img").attr("src",coupon.get("brandPic"));
-							$(thisCoupon).find("h4").text(coupon.get("couponDes"));
-							},
-							error: function(object, error) {
-							// The object was not retrieved successfully.
-							// error is a Parse.Error with an error code and description.
-							console.log("failed retrieving coupon");
-							}
-						});
+
+		var Coupons = Parse.Object.extend("Coupons");
+		var query = new Parse.Query(Coupons);
+		//query.ascending("expirationAt");
+		query.containedIn("objectId", couponIDList);
+		query.find({
+			success: function(coupons_data) {
+				//sort
+				function compare(a,b) {
+					//console.log(new Date(a.get("expirationAt")));
+					if(a.get("expirationAt") == undefined && b.get("expirationAt")!= undefined){
+						//console.log("yes: "+a.get("expirationAt"));
+						return 1
+					}
+					if(a.get("expirationAt") != undefined && b.get("expirationAt")== undefined){
+						//console.log("null: "+a.get("expirationAt"));
+						return -1
+					}
+					if ((new Date(a.get("expirationAt"))) < (new Date(b.get("expirationAt")))) {
+						//console.log("<: "+a.get("expirationAt"));
+						return -1;
+					}
+					if ((new Date(a.get("expirationAt"))) > (new Date(b.get("expirationAt")))) {
+						//console.log("<: "+a.get("expirationAt"));
+						return 1;
+					}
+					return 0;
+					}
+
+				var coupons = coupons_data.sort(compare);
+
+				//The object was retrieved successfully.
+				$(".thumbnail.couponThumbnail").each(function(index){
+					//console.log(JSON.stringify(coupons[index]));
+					var thisCoupon = this;
+					$(thisCoupon).attr("id",coupons[index].id);
+					$(thisCoupon).attr("href","./savedcoupondetail");
+					$(thisCoupon).click(function(e){
+						sessionStorage.setItem("current_coupon", JSON.stringify(coupons[index]));	
+					});
+								
+					$(thisCoupon).find("img").attr("src",coupons[index].get("brandPic"));
+					$(thisCoupon).find("h4").text(coupons[index].get("couponDes"));
+					if(coupons[index].get("expirationAt")){
+						//console.log(coupon.get("expirationAt"));
+						var theDate = coupons[index].get("expirationAt").toLocaleDateString();
+						$(thisCoupon).find("#expireDate").text("Expiring at: "+theDate);
+						}
+				});
+			},
+			error: function(object, error) {
+			// The object was not retrieved successfully.
+			// error is a Parse.Error with an error code and description.
+			console.log("failed retrieving coupon");
+			}
+		});
 			
+
+
+		function haha(){
+			$(".thumbnail.couponThumbnail").each(function(){
+				var thisCoupon = this;
+				var couponID = $(this).attr("id");
+				var Coupons = Parse.Object.extend("Coupons");
+							var query = new Parse.Query(Coupons);
+							query.descending("createdAt");
+							query.get(couponID, {
+								success: function(coupon) {
+								// The object was retrieved successfully.
+
+								$(thisCoupon).attr("href","./savedcoupondetail");
+								$(thisCoupon).click(function(e){
+									sessionStorage.setItem("current_coupon", JSON.stringify(coupon));	
+									});
+								
+								$(thisCoupon).find("img").attr("src",coupon.get("brandPic"));
+								$(thisCoupon).find("h4").text(coupon.get("couponDes"));
+								if(coupon.get("expirationAt")){
+									//console.log(coupon.get("expirationAt"));
+									var theDate = coupon.get("expirationAt").toLocaleDateString();
+									$(thisCoupon).find("#expireDate").text("Expires at: "+theDate);
+									}
+								},
+								error: function(object, error) {
+								// The object was not retrieved successfully.
+								// error is a Parse.Error with an error code and description.
+								console.log("failed retrieving coupon");
+								}
+							});
+				
 			});
+		}
 
 
 

@@ -61,6 +61,33 @@ body {
 }
 
 /*
+ * coupon list
+ * --------------------------------------------------
+ */
+
+.thumbnail.couponThumbnail{
+	margin-bottom: 10px;
+}
+
+#brandPic{
+	height:60px;
+}
+
+.couponDes{
+	font-size: 14px;
+}
+
+#expireDate {
+	color:red;
+}
+
+.thumbnail > #expireDate {
+	margin-left:15px;
+	padding-top:5px;
+	padding-bottom: 5px;
+	
+}
+/*
  * Off Canvas
  * --------------------------------------------------
  */
