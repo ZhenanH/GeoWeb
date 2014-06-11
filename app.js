@@ -153,9 +153,11 @@ app.namespace('/mymovemobile',function(){
 		parse.findMany('Coupons', '', function (err, response) {
 			if(response)
   				console.log('retreive ', response.results.length + 'coupons');
+			
+			var sortedCoupons = response.results.sort(compare);
   			res.render('mymovewallet/brands',{
 				title:'Movers',
-				couponData: response.results
+				couponData: sortedCoupons
 			});
 		});
 		
@@ -232,3 +234,19 @@ app.get('/users', user.list);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+function compare(a,b) {
+	//console.log(a.createdAt); 
+	if (a.createdAt< b.createdAt) {
+		//console.log("<: "+a.expirationAt);
+		return 1;
+	}
+	if (a.createdAt> b.createdAt) {
+		//console.log("<: "+a.expirationAt);
+		return -1;
+	}
+	return 0;
+	}
+
+

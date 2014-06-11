@@ -30,6 +30,9 @@ block content
 									.caption
 										h4 #{couponData[i].couponDes}
 									.saveButton(id=couponData[i].objectId) save
+									if(couponData[i].isNew)
+										.ribbon-wrapper-green
+											.ribbon-green New
 
 
 
@@ -47,9 +50,9 @@ block content
 					var thisSaveButton = this;
 
 					
-					//check if is seen
-					if(!sessionStorage.getItem("hasSeen_"+$(this).attr("id")))
-						flagNew($(this).parent());
+					//- //check if is seen
+					//- if(!sessionStorage.getItem("hasSeen_"+$(this).attr("id")))
+					//- 	flagNew($(this).parent());
 
 
 					var User = Parse.Object.extend("User");
@@ -82,8 +85,6 @@ block content
 
 	script(type='text/javascript').
 		$(".thumbnail").click(function(e){
-			//flag seen
-			sessionStorage.setItem("hasSeen_"+$(this).find(".saveButton").attr("id"), true);
 
 			//marked saved coupons
 			sessionStorage.setItem("is_saved", $(this).attr("isSaved"));
@@ -114,8 +115,6 @@ block content
 
 		$(".saveButton").click(function(e){
 
-			//flag seen
-			sessionStorage.setItem("hasSeen_"+$(this).attr("id"), true);
 
 			e.stopPropagation(); 
 			var thisButton = this;
