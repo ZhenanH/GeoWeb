@@ -32,6 +32,7 @@ block content
 									.saveButton(id=couponData[i].objectId) save
 
 
+
 	script(type='text/javascript').
 
 
@@ -44,6 +45,13 @@ block content
 				//check saved coupon
 				$(".saveButton").each(function(){
 					var thisSaveButton = this;
+
+					
+					//check if is seen
+					if(!sessionStorage.getItem("hasSeen_"+$(this).attr("id")))
+						flagNew($(this).parent());
+
+
 					var User = Parse.Object.extend("User");
 						var query = new Parse.Query(User);
 						query.get(userObjID, {
@@ -74,6 +82,8 @@ block content
 
 	script(type='text/javascript').
 		$(".thumbnail").click(function(e){
+			//flag seen
+			sessionStorage.setItem("hasSeen_"+$(this).find(".saveButton").attr("id"), true);
 
 			//marked saved coupons
 			sessionStorage.setItem("is_saved", $(this).attr("isSaved"));
@@ -104,11 +114,13 @@ block content
 
 		$(".saveButton").click(function(e){
 			
-			
+			//flag seen
+			sessionStorage.setItem("hasSeen_"+$(this).attr("id"), true);
+
 			e.stopPropagation(); 
 			var thisButton = this;
 			
-				//$(".test").text(userObjID);
+				trackSaveButton($(this).attr("id"));
 				var User = Parse.Object.extend("User");
 				var query = new Parse.Query(User);
 				query.get(userObjID, {
@@ -143,6 +155,20 @@ block content
 
 
 			});
+
+		function trackSaveButton(couonId){
+			var dimensions = {
+				userID: userObjID,
+				couponSaved: couonId
+			};
+
+			// Send the dimensions to Parse along with the 'search' event
+			Parse.Analytics.track('saveCouopn', dimensions);
+		}
+
+		function flagNew(doc){
+			$(doc).append("<div class='ribbon-wrapper-green'><div class='ribbon-green'>New</div></div>")
+		}
 
 
 
