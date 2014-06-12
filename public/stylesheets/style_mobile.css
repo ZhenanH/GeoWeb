@@ -5,6 +5,10 @@ body {
   overflow: hidden; /* Prevent scroll on narrow devices */
 }
 
+.caption > h4 {
+	font-size: 16px;
+}
+
 * {
     -webkit-touch-callout: none;
     -webkit-user-select: none; /* Disable selection/copy in UIWebView */

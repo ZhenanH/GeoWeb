@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "MyMoveMobile": {
+            "applicationId": "NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", 
+            "masterKey": "MyDArfuQFQwY78vpLdHvjEhQVgqo4nLwrwSJYuee"
+        }, 
+        "_default": {
+            "link": "MyMoveMobile"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.18"
+    }
+}
