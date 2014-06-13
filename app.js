@@ -150,16 +150,22 @@ app.namespace('/mymovemobile',function(){
 	});
 
 	app.get('/brands', function(req,res){
-		parse.findMany('Coupons', '', function (err, response) {
+
+		var params = {
+			where:{isPromoting: true},
+			order:'-createdAt'
+		};
+
+		kaiseki.getObjects('Coupons',params,function(err,response,body,success){
 			if(response)
-  				console.log('retreive ', response.results.length + 'coupons');
+  				console.log('retreive ', body.length + ' coupons');
 			
-			var sortedCoupons = response.results.sort(compare);
   			res.render('mymovewallet/brands',{
 				title:'Movers',
-				couponData: sortedCoupons
+				couponData: body
 			});
 		});
+
 		
 	});
 
@@ -235,7 +241,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-
+//deprecated
 function compare(a,b) {
 	//console.log(a.createdAt); 
 	if (a.createdAt< b.createdAt) {
