@@ -23,7 +23,7 @@ html
 		script(type='text/javascript').
 			//var userObjID = "REe3FzHTrg";
 			//var userName = "6B07AADF-977E-4D6A-96BE-535AE599D418";
-			var userObjID;
+			var userObjID = null;
 			var userName;
 			var currentUser;
 
@@ -90,10 +90,12 @@ html
 						// do stuff with the user
 						sessionStorage.setItem("userID",userObjID );
 					} else {
+
 						// show the signup or login page
 						Parse.User.logIn(userName, "", {
 							success: function(user) {
 							// Do stuff after successful login.
+							//alert("save use object id: "+userObjID);
 							console.log("save use object id");
 							sessionStorage.setItem("userID", userObjID);
 								},

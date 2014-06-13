@@ -41,11 +41,10 @@ block content
 
 
 		function checkCoupons(){
-			if(sessionStorage.getItem("userID")){
+			if(userObjID){
 
 				//update my coupon link
 				$("#myCouponLink").attr("href","./mycoupons?userObjID="+userObjID);
-				console.log(userObjID);
 				//check saved coupon
 				$(".saveButton").each(function(){
 					var thisSaveButton = this;
