@@ -24,7 +24,7 @@ block content
 		$(".thumbnail").each(function(){
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
-				$(this).find(".couponCodes").text(currentCoupon.couponCode);
+				$(this).find(".couponCodes").text("Code: "+currentCoupon.couponCode);
 				if(sessionStorage.getItem("is_saved")=="unSaved")
 					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"''>Save</div>");
 				if(currentCoupon.expirationAt){

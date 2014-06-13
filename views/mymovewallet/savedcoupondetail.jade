@@ -25,7 +25,7 @@ block content
 		$(".thumbnail").each(function(){
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
-				$(this).find(".couponCodes").text(currentCoupon.couponCode);
+				$(this).find(".couponCodes").text("Code: "+currentCoupon.couponCode);
 				if(currentCoupon.expirationAt){
 					//console.log((new Date(currentCoupon.expirationAt.iso)).toLocaleDateString());
 					var theDate = (new Date(currentCoupon.expirationAt.iso)).toLocaleDateString();
