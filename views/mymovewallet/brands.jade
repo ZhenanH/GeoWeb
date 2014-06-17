@@ -45,6 +45,7 @@ block content
 
 				//update my coupon link
 				$("#myCouponLink").attr("href","./mycoupons?userObjID="+userObjID);
+				alert(userObjID);
 				//check saved coupon
 				$(".saveButton").each(function(){
 					var thisSaveButton = this;
@@ -158,10 +159,10 @@ block content
 		//update time
 		$(".updateDiv").text("last update on "+ (new Date()).toLocaleDateString()+",  "+(new Date()).toLocaleTimeString());
 
-		function trackSaveButton(couonId){
+		function trackSaveButton(couponId){
 			var dimensions = {
 				userID: userObjID,
-				couponSaved: couonId
+				couponSaved: couponId
 			};
 
 			// Send the dimensions to Parse along with the 'search' event
