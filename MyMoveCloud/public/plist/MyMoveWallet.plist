@@ -11,7 +11,7 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>http://www.pbsmartlab.com/mymove/V103/MyMoveWallet.ipa</string>
+					<string>https://mymove.parseapp.com/v104/MyMoveWallet.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
@@ -19,7 +19,7 @@
 				<key>bundle-identifier</key>
 				<string>com.leandevelop.MyMoveWallet</string>
 				<key>bundle-version</key>
-				<string>1.03</string>
+				<string>1.04</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
