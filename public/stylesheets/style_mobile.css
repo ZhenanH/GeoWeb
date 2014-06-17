@@ -15,10 +15,9 @@ body {
 }
 
 .updateDiv {
-	color:white;
+	color:gray;
 	text-align: center;
 	font-size: 12px;
-	background-color: rgba(2,2,2,0.7);
 	padding:2px;
 }
 

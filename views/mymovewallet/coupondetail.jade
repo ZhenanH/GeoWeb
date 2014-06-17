@@ -41,7 +41,7 @@ block content
 	
 			var thisButton = this;
 			
-				//$(".test").text(userObjID);
+				trackSaveButton($(thisButton).attr("id"));
 				var User = Parse.Object.extend("User");
 				var query = new Parse.Query(User);
 				query.get(sessionStorage.getItem("userID"), {
@@ -75,6 +75,16 @@ block content
 
 
 			});
+
+			function trackSaveButton(couponId){
+				var dimensions = {
+					userID: sessionStorage.getItem("userID"),
+					couponSaved: couponId
+				};
+
+				// Send the dimensions to Parse along with the 'search' event
+				Parse.Analytics.track('saveCouopn', dimensions);
+			}
 
 
 
