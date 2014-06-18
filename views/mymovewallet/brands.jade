@@ -169,6 +169,11 @@ block content
 			Parse.Analytics.track('saveCouopn', dimensions);
 		}
 
+		mixpanel.people.set({
+			"$last_login": new Date(),         // properties can be dates...
+			"webId":userObjID
+		});
+
 
 
 
