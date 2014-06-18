@@ -89,7 +89,7 @@ html
 			
 			function loginUser(){
 				currentUser = Parse.User.current();
-				alert(userObjID);
+				//alert(userObjID);
 				mixpanel.identify(userObjID);
 				mixpanel.people.set({
 					"$last_login": new Date(),         // properties can be dates...
