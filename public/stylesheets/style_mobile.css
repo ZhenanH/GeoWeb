@@ -208,3 +208,37 @@ body {
   right: 0;
 }
 
+
+/*
+ * call out
+ * --------------------------------------------------
+ */
+
+
+div.callout {
+	background-color: #eee;
+	position: relative;
+	color: #444;
+	padding: 10px;
+	border-radius: 3px;	
+	margin: 15px;
+	
+	
+	/*box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;*/
+}
+
+.callout::before {
+	content: "";
+	width: 0px;
+	height: 0px;
+	border: 0.8em solid transparent;
+	position: absolute;
+}
+
+
+.callout.bottom::before {
+	left: 10%;
+	top: -20px;
+	border-bottom: 10px solid #eee;
+}
+

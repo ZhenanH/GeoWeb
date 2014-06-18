@@ -16,7 +16,7 @@ block content
 						h4 Up To 70% Off Father's Day Finds 
 					#expireDate  
 					.couponCodes No code needed
-			
+					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
 
 	script(type='text/javascript').
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
@@ -25,6 +25,7 @@ block content
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
 				$(this).find(".couponCodes").text("Code: "+currentCoupon.couponCode);
+				$(this).find("#howToUse").text(currentCoupon.howTo);
 				if(sessionStorage.getItem("is_saved")=="unSaved")
 					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"''>Save</div>");
 				if(currentCoupon.expirationAt){
