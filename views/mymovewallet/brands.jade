@@ -116,7 +116,7 @@ block content
 
 		$(".saveButton").click(function(e){
 
-
+			mixpanel.track("save coupon on main page");
 			e.stopPropagation(); 
 			var thisButton = this;
 			

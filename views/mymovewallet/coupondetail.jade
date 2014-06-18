@@ -19,6 +19,7 @@ block content
 					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
 
 	script(type='text/javascript').
+		mixpanel.track("check coupon detail from main page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
 		//alert(currentCoupon);
 		$(".thumbnail").each(function(){
@@ -39,7 +40,7 @@ block content
 
 		$(".saveButton").click(function(e){
 			
-	
+			mixpanel.track("save coupon on detail page");
 			var thisButton = this;
 			
 				trackSaveButton($(thisButton).attr("id"));

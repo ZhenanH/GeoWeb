@@ -20,6 +20,7 @@ block content
 			
 
 	script(type='text/javascript').
+		mixpanel.track("check coupon detail from savedcoupon page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
 		//console.log(currentCoupon);
 		$(".thumbnail").each(function(){

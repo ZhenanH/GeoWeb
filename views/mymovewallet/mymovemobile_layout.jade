@@ -89,6 +89,7 @@ html
 			
 			function loginUser(){
 				currentUser = Parse.User.current();
+				mixpanel.identify(userObjID);
 					if (currentUser) {
 						// do stuff with the user
 						sessionStorage.setItem("userID",userObjID );
