@@ -89,7 +89,12 @@ html
 			
 			function loginUser(){
 				currentUser = Parse.User.current();
+				alert(userObjID);
 				mixpanel.identify(userObjID);
+				mixpanel.people.set({
+					"$last_login": new Date(),         // properties can be dates...
+					"webId":userObjID
+				});
 					if (currentUser) {
 						// do stuff with the user
 						sessionStorage.setItem("userID",userObjID );
