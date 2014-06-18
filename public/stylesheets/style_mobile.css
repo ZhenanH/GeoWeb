@@ -39,6 +39,11 @@ body {
 	margin-bottom: 5px;
 }
 
+.caption{
+	text-align: center;
+}
+
+
 .caption h6{
 	color:gray;
 }
