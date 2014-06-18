@@ -28,6 +28,7 @@ block content
 								
 
 	script(type='text/javascript').
+		mixpanel.track("check savedCoupons");
 		var couponIDList = [];
 		$(".thumbnail.couponThumbnail").each(function(){
 			var thisCoupon = this;
