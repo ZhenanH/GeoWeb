@@ -83,6 +83,21 @@ block content
 						//console.log(coupon.get("expirationAt"));
 						var theDate = coupons[index].get("expirationAt").toLocaleDateString();
 						$(thisCoupon).find("#expireDate").text("Expiring at: "+theDate);
+
+						if(coupons[index].get("expirationAt") < (new Date(new Date().getTime() - (24 * 60 * 60 * 1000)))){
+							$(thisCoupon).find("#expireDate").text("").append("<span class='expiredDate'>Expired</span>");
+							$(thisCoupon).addClass("expired").click(function(e) {
+								e.preventDefault();
+								//do other stuff when a click happens
+								});
+							
+							$(thisCoupon).find("#expireDate").append("<button class='removeButton btn btn-danger'>Remove</button>");
+							$(thisCoupon).find(".removeButton").click(function(){
+								deleteCoupon(this, $(thisCoupon).attr('id'));
+								});
+							//$(thisCoupon).attr('id')
+
+						}
 						}
 				});
 			},
@@ -95,38 +110,42 @@ block content
 			
 
 
-		function haha(){
-			$(".thumbnail.couponThumbnail").each(function(){
-				var thisCoupon = this;
-				var couponID = $(this).attr("id");
-				var Coupons = Parse.Object.extend("Coupons");
-							var query = new Parse.Query(Coupons);
-							query.descending("createdAt");
-							query.get(couponID, {
-								success: function(coupon) {
-								// The object was retrieved successfully.
+		function deleteCoupon(deletButoon, couponToDelete){
+				mixpanel.track("remove coupon");
+				console.log("couponid: "+couponToDelete);
+				console.log("userid: "+sessionStorage.getItem("userID"));
+				var User = Parse.Object.extend("User");
+				var query = new Parse.Query(User);
+				query.get(sessionStorage.getItem("userID"), {
+					success: function(theCurrentUser) {
+					// The object was retrieved successfully.
+						var savedCoupons = theCurrentUser.get("savedCoupons");
 
-								$(thisCoupon).attr("href","./savedcoupondetail");
-								$(thisCoupon).click(function(e){
-									sessionStorage.setItem("current_coupon", JSON.stringify(coupon));	
-									});
-								
-								$(thisCoupon).find("img").attr("src",coupon.get("brandPic"));
-								$(thisCoupon).find("h4").text(coupon.get("couponDes"));
-								if(coupon.get("expirationAt")){
-									//console.log(coupon.get("expirationAt"));
-									var theDate = coupon.get("expirationAt").toLocaleDateString();
-									$(thisCoupon).find("#expireDate").text("Expires at: "+theDate);
-									}
+						console.log(JSON.stringify(savedCoupons));
+						if(savedCoupons)
+							savedCoupons.splice($.inArray(couponToDelete, savedCoupons), 1);
+
+						console.log(JSON.stringify(savedCoupons));
+
+						theCurrentUser.set("savedCoupons",savedCoupons);
+
+
+						theCurrentUser.save(null,{
+							success:function(user){
+								//remove the div
+								$(deletButoon).parent().parent().parent().parent().remove();
 								},
-								error: function(object, error) {
-								// The object was not retrieved successfully.
-								// error is a Parse.Error with an error code and description.
-								console.log("failed retrieving coupon");
-								}
+							error: function(user,error){
+								alert(JSON.strinhgify(error));
+							}
 							});
-				
-			});
+					},
+					error: function(object, error) {
+					// The object was not retrieved successfully.
+					// error is a Parse.Error with an error code and description.
+					alert("cannot delete the coupon");
+					}
+				});
 		}
 
 
