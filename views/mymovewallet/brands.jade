@@ -13,7 +13,7 @@ block content
 
 	.canvas.canvas-slide
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
-			button.navbar-toggle(type="button", data-toggle="offcanvas", data-recalc="false", data-target=".navmenu",data-canvas=".canvas")
+			button.navbar-toggle(type="button", data-toggle="offcanvas", data-recalc="false", data-target=".navmenu",data-canvas=".canvas", onclick="trackMenu()")
 				span.icon-bar
 				span.icon-bar
 				span.icon-bar
@@ -26,7 +26,7 @@ block content
 				- if(couponData.length>=0)
 					- for (var i = 0; i < couponData.length; ++i)
 							.col-xs-6.col-sm-4.col-md-3.col-lg-3
-								.thumbnail(onclick = "location.href='./coupondetail'", isSaved = "unSaved")
+								.thumbnail(onclick = "location.href='./coupondetail'", isSaved = "unSaved" position=i)
 									img.img-responsive(src=couponData[i].brandPic)
 									.caption
 										h4 #{couponData[i].couponDes}
@@ -87,6 +87,7 @@ block content
 	script(type='text/javascript').
 		$(".thumbnail").click(function(e){
 
+			trackCouponClick($(this).attr("position"));
 			//marked saved coupons
 			sessionStorage.setItem("is_saved", $(this).attr("isSaved"));
 
@@ -120,7 +121,7 @@ block content
 			e.stopPropagation(); 
 			var thisButton = this;
 			
-				trackSaveButton($(this).attr("id"));
+				trackSaveButton($(this).attr("id"),$(this).parent().attr("position"));
 				var User = Parse.Object.extend("User");
 				var query = new Parse.Query(User);
 				query.get(userObjID, {
@@ -159,16 +160,29 @@ block content
 		//update time
 		$(".updateDiv").text("last update on "+ (new Date()).toLocaleDateString()+",  "+(new Date()).toLocaleTimeString());
 
-		function trackSaveButton(couponId){
+		function trackSaveButton(couponId,pos){
 			var dimensions = {
 				userID: userObjID,
-				couponSaved: couponId
+				couponSaved: couponId,
+				position: pos
 			};
 
 			// Send the dimensions to Parse along with the 'search' event
 			Parse.Analytics.track('saveCouopn', dimensions);
 		}
 
+		function trackCouponClick(pos){
+			var dimensions = {
+				position: pos
+			};
+
+			// Send the dimensions to Parse along with the 'search' event
+			Parse.Analytics.track('clickCouopn', dimensions);
+		}
+
+		function trackMenu(){
+			mixpanel.track("click on menu");
+		}
 
 
 
