@@ -84,7 +84,7 @@ block content
 						var theDate = coupons[index].get("expirationAt").toLocaleDateString();
 						$(thisCoupon).find("#expireDate").text("Expiring at: "+theDate);
 
-						if(coupons[index].get("expirationAt") < (new Date(new Date().getTime() - (24 * 60 * 60 * 1000)))){
+						if(+coupons[index].get("expirationAt") < +(new Date(new Date().getTime()))){
 							$(thisCoupon).find("#expireDate").text("").append("<span class='expiredDate'>Expired</span>");
 							$(thisCoupon).addClass("expired").click(function(e) {
 								e.preventDefault();
