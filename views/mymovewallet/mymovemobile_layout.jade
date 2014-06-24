@@ -116,6 +116,18 @@ html
 					}
 				}
 
+			var sendToApp = function(_key, _val) {
+
+				var iframe = document.createElement("IFRAME"); 
+				iframe.setAttribute("src", _key + ":##sendToApp##" + _val); 
+				document.documentElement.appendChild(iframe); 
+				iframe.parentNode.removeChild(iframe); 
+				iframe = null; 
+				//alert("getting it: "+_key+"  and  "+_val);
+			}; 
+
+		
+		//sendToApp("ios-log", "from js");
 			//loginUser();
 			//checkCoupons();
 

@@ -64,12 +64,24 @@ body {
 	color:gray;
 }
 
+.detailCouponImage{
+  width:45%;
+}
+
 .saveButton{
 	background-color: #78D1F5;
 	color:white;
 	text-align: center;
 	padding:5px;
 
+}
+
+.goShoppingButton{
+  margin-top: 10px;
+  background-color: #FA8C7F;
+  color:white;
+  text-align: center;
+  padding:5px; 
 }
 
 .coupons .col-xs-6{

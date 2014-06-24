@@ -33,6 +33,16 @@ block content
 					var theDate = (new Date(currentCoupon.expirationAt.iso)).toLocaleDateString();
 					$(this).find("#expireDate").text("Expiring at: "+theDate);
 				}
+				if(currentCoupon.websiteURL){
+					$(this).append("<div class='goShoppingButton' url='"+currentCoupon.websiteURL+"'>Go shop online</div>");					
+				}
+			});
+
+
+		$(".goShoppingButton").click(function(e){
+			//alert($(this).attr("url"));
+			mixpanel.track("go shopping online")
+			sendToApp("openWebView", $(this).attr("url"));
 			});
 		
 
