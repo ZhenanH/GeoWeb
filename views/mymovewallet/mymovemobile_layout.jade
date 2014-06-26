@@ -58,10 +58,12 @@ html
 					if(isEnableTouch){
 						isEnableTouch=!isEnableTouch;
 						document.addEventListener('touchmove', preventDefault, false);
+						document.addEventListener('onclick', preventDefault, false);
 						}
 					else{
 						isEnableTouch=!isEnableTouch;
 						document.removeEventListener('touchmove', preventDefault, false);
+						document.removeEventListener('onclick', preventDefault, false);
 						}
 					
 				});

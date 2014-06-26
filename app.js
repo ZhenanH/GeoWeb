@@ -183,6 +183,34 @@ app.namespace('/mymovemobile',function(){
 		
 	});
 
+	app.get('/localdeals', function(req,res){
+		var url_parts = url.parse(req.url, true);
+		var latlng = url_parts.query.latlng;
+		var locationString = url_parts.query.locationString;
+		console.log(latlng+", "+locationString);
+		var requestUrl = "http://lesserthan.com/api.getDealsZip/06460/json";
+		if(locationString!="null")
+			requestUrl = "http://lesserthan.com/api.getDealsCity"+locationString+"json/?callback=?";
+		if(latlng!="null"){
+			var lat = latlng.split(',')[0];
+			var lng = latlng.split(',')[1];
+			requestUrl = "http://lesserthan.com/api.getDealsLatLon/json/?lat="+lat+"&lon="+lng;
+		}
+		console.log(requestUrl);
+		request({"rejectUnauthorized":false, "url":requestUrl},function (error, response, body){
+			if (!error && response.statusCode == 200) {
+    		//console.log(response.body); 
+			res.render('mymovewallet/localdeals',{
+			title:'Movers',
+			localdeals:JSON.parse(response.body)
+			});
+  			}
+		});
+
+
+		
+	});
+
 	app.get('/coupondetail', function(req,res){
 		res.render('mymovewallet/coupondetail',{
 		title:'Movers'

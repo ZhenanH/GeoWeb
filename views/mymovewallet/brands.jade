@@ -8,8 +8,8 @@ block content
 			li.active 
 				a Today's Deals
 			li
-				a#myCouponLink(href="./mycoupons") Saved Deals
-					span.badge.pull-right#savedCouponCount 0
+				a#localDealLink(href="./localdeals") Local Deals
+					span.badge.pull-right(style="background-color:red") New!
 
 	.canvas.canvas-slide
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
@@ -17,9 +17,11 @@ block content
 				span.icon-bar
 				span.icon-bar
 				span.icon-bar
-			//.container-fluid
-				//.navbar-header
-					//a.navbar-brand.pull-right#myCouponLink(href="./mycoupons") Saved
+
+			.container-fluid
+				.navbar-header
+					a.navbar-brand.pull-right#myCouponLink(href="./mycoupons") Saved
+						span.badge.pull-right#savedCouponCount(style="margin-left:4px") 0
 		.updateDiv last update pull to load latest coupons
 		.container.coupons.multi-columns-row
 
@@ -40,6 +42,7 @@ block content
 	script(type='text/javascript').
 		mixpanel.track("view today's deal page");
 
+		$("#localDealLink").attr("href","./localdeals?latlng="+sessionStorage.getItem('currentLatLng')+"&locationString="+sessionStorage.getItem('currentLocationString'));
 		function checkCoupons(){
 			if(userObjID){
 
