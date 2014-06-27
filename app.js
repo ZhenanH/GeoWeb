@@ -190,7 +190,7 @@ app.namespace('/mymovemobile',function(){
 		console.log(latlng+", "+locationString);
 		var requestUrl = "http://lesserthan.com/api.getDealsZip/06460/json";
 		if(locationString!="null")
-			requestUrl = "http://lesserthan.com/api.getDealsCity"+locationString+"json/?callback=?";
+			requestUrl = "http://lesserthan.com/api.getDealsCity"+locationString+"json";
 		if(latlng!="null"){
 			var lat = latlng.split(',')[0];
 			var lng = latlng.split(',')[1];

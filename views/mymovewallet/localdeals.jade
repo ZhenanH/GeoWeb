@@ -49,10 +49,22 @@ block content
 													.span(style="font-size:16px") #{localdeals.items[i].deal.discount}
 												.col-xs-4 Source: #{localdeals.items[i].deal.source}
 
+
 								
 
 	script(type='text/javascript').
 		mixpanel.track("view local deals")
+		//console.log(sessionStorage.getItem("currentLocationString")+", "+sessionStorage.getItem("currentCity"));
+		//console.log(sessionStorage.getItem("currentLocationString").split('/')[2]+", "+sessionStorage.getItem("currentCity"));
+
+		if(sessionStorage.getItem("currentLocationString")!=null){
+			$("#currentlocationTag").text(sessionStorage.getItem("currentLocationString").split('/')[2]);
+		}
+		if(sessionStorage.getItem("currentCity")!=null){
+			$("#currentlocationTag").text(sessionStorage.getItem("currentCity"));
+		}
+
+		
 
 		function configureWebOpen(){
 			$(".couponThumbnail").click(function(e){
@@ -104,6 +116,7 @@ block content
 				mixpanel.track("pick current location");
 				sessionStorage.setItem("currentLocationString",$("select option:selected").val());
 				loadLocalDeals($("select option:selected").val(),null,null);
+				$("#currentlocationTag").text($("select option:selected").text());
 			}
 			$(this).blur();
 		});
@@ -117,14 +130,15 @@ block content
 
 			$.getJSON(apiString, function(data) {
 				if(data.items.length>0){
-					$("#currentlocationTag").text(data.items[0].region.locality);
+					//$("#currentlocationTag").text(data.items[0].region.locality);
 					$.each(data.items,function(i){
 					$("#localdealList").append("<div class='col-xs-12'><a class='thumbnail couponThumbnail' link='"+data.items[i].deal.link+"'><div class='row'><div class='col-xs-4'><img class='localDealPic' src='"+data.items[i].deal.image_thumb_retina+"'/></div><div class='col-xs-8'><div class='dealTitle'>"+data.items[i].merchant.name+"</div><div class='dealLocation'>"+data.items[i].merchant.address+", "+data.items[i].merchant.city+", "+data.items[i].merchant.state+"</div><div class='row'><div class='dealSummary'><div class='col-xs-4'>Price: <span style='font-size:16px'>"+data.items[i].deal.price+"</span></div><div class='col-xs-4'>Discount: <span style='font-size:16px'>"+data.items[i].deal.discount+"</span></div><div class='col-xs-4'>Source: "+data.items[i].deal.source+"</div></div></div></div></div></a></div>");
 					});
 				}
-				else
-					$("#currentlocationTag").text("no results");
-				
+				else{
+					//$("#currentlocationTag").text("no results");
+
+				}
 				configureWebOpen();
 			});
 		}
@@ -141,6 +155,14 @@ block content
 			sessionStorage.setItem("currentLatLng",lat+","+lng);
 			loadLocalDeals(null,lat,lng);
 		}
+
+		function setCurrentLocationTitle(location){
+			//lert(location);
+			$("#currentlocationTag").text(location);
+			sessionStorage.setItem("currentCity",location);
+		}
+
+
 
 
 
