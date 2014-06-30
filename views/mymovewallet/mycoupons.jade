@@ -84,6 +84,7 @@ block content
 						var theDate = coupons[index].get("expirationAt").toLocaleDateString();
 						$(thisCoupon).find("#expireDate").text("Expiring at: "+theDate);
 
+
 						if(+coupons[index].get("expirationAt") < +(new Date(new Date().getTime()))){
 							$(thisCoupon).find("#expireDate").text("").append("<span class='expiredDate'>Expired</span>");
 							$(thisCoupon).addClass("expired").click(function(e) {
@@ -98,6 +99,16 @@ block content
 							//$(thisCoupon).attr('id')
 
 						}
+						var d = new Date();
+						var dif = Math.floor((coupons[index].get("expirationAt")-d)/1000/60/60/24);
+						
+						if(dif<=2&&dif>0){
+							$(thisCoupon).append("<div class='ribbon-wrapper-yellow'><div class='ribbon-yellow'>"+dif+" days left</div></div>");
+						}
+						if(dif==0){
+							$(thisCoupon).append("<div class='ribbon-wrapper-yellow'><div class='ribbon-yellow'>The last day</div></div>");
+						}
+
 						}
 				});
 			},

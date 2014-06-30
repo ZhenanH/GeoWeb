@@ -254,6 +254,24 @@ app.post('/sendLog',function(req,res){
 	// })
 });
 
+app.get('/console', function(req,res){
+
+	var params = {
+		//where:{isPromoting: true},
+		order:'-updatedAt'
+	};
+
+	kaiseki.getUsers(params,function(err,response,body,success){
+		//console.log(body[0]);
+		if(response)		
+			res.render('console',{
+			title:'Console',
+			users: body
+		});
+	});
+	
+});
+
 
 app.get('/heatmap', function(req,res){
 	res.render('heatmap',{title:'Heatmap'});

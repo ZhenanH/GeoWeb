@@ -1,0 +1,167 @@
+doctype html
+html
+	head
+		title #{title} - My Move Console
+		link(rel='stylesheet', href='/stylesheets/style_research.css')
+		link(rel='stylesheet', href='/stylesheets/console.css')
+		link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+		link(rel="stylesheet" href="http://getbootstrap.com/assets/css/docs.min.css")
+		link(rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
+		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")
+		script(src="/javascripts/bootbox.min.js")
+		script(type='text/javascript').
+			Parse.initialize("NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", "ncqIDz5AJwzQ0OB772n1FfnQ9SOc6A6bKz2cySwq");
+	
+	body
+		.container
+			table.table
+				tr
+					th User
+					th Last Update
+					th Coupons
+					th Action
+					td Interactions
+				- if(users.length>0)	
+					- for(var i=0;i<users.length;i++)
+						tr(class="tableRow")
+							td #{users[i].remark}
+							td #{new Date(users[i].updatedAt).toLocaleDateString() + ", "+ new Date(users[i].updatedAt).toLocaleTimeString()}
+							- if(users[i].savedCoupons)
+								td(class="coupons", couponTag = JSON.stringify(users[i].savedCoupons))
+							- else
+								td(class="coupons", couponTag = "[]")
+							td 
+								button.btn.btn-default.msgBtn(channel=users[i].username) Send Msg
+							td.interactions(interID=users[i].username) 
+
+
+		
+
+		script(type='text/javascript').
+			downloadAllCoupons();
+			loadInteractions();
+
+			function downloadAllCoupons(){
+				var Coupons = Parse.Object.extend("Coupons");
+				var query = new Parse.Query(Coupons);
+				query.find({
+					success: function(results) {
+					//console.log(JSON.stringify(results));
+					loadCoupons(results);
+				},
+					error: function(error) {
+					alert("Error: " + error.code + " " + error.message);
+					}
+				});
+			}
+
+			function loadCoupons(coupons){
+				$(".tableRow").each(function(i,row){
+					var d = new Date();
+					var couponTags = JSON.parse($(row).find(".coupons").attr('couponTag'));
+					for(var i=0;i<couponTags.length;i++){
+						var result = $.grep(coupons, function(e){ return e.id == couponTags[i]; });
+						if(new Date(result[0].get('expirationAt'))<(new Date()))
+							$(row).find(".coupons").append("<span class='couponTag expiredTag'>"+result[0].get('brandName')+"</span>");
+						else if((new Date(result[0].get('expirationAt')) < d.setDate(d.getDate() +2)))
+							$(row).find(".coupons").append("<span class='couponTag aboutToExpiredTag'>"+result[0].get('brandName')+"</span>");
+						else
+							$(row).find(".coupons").append("<span class='couponTag'>"+result[0].get('brandName')+"</span>");
+					}
+
+					});
+			}
+
+			$(".msgBtn").click(function(){
+				var channels = [$(this).attr("channel")];
+				var channelId = $(this).attr("channel");
+				bootbox.dialog({
+					message: "<textarea id='"+channelId+"' cols='90' rows='4' ></textarea>",
+					title: "Sending message to "+ channelId,
+					buttons: {
+
+						Cancel: {
+							label: "Cancel",
+							className: "btn-default",
+							callback: function() {
+							
+							}
+						},
+						Send: {
+							label: "Send",
+							className: "btn-primary",
+							callback: function() {
+								sendMsg(channels,$("#"+channelId).val());
+								//alert($("#"+channelId).val());
+								//addInteractionNote(channelId,$("#"+channelId).val());
+							}
+						}
+
+					}
+				});
+			});
+
+			function sendMsg(chanels,text){
+				Parse.Push.send({
+					channels: chanels,
+						data: {
+							alert: text,
+							badge: "Increment",
+							sound: "cheering.caf",
+							title: "Reminder"
+						}
+					}, {
+					success: function() {
+					// Push was successful
+						alert("sent successfully");
+						addInteractionNote(chanels[0],text);
+					},
+					error: function(error) {
+					// Handle error
+						alert("not sent: "+JSON.stringify(error));
+					}
+				});
+			}
+			
+			function addInteractionNote(userName,msg){
+				var Interactions = Parse.Object.extend("Interactions");
+				var interactions = new Interactions();
+				interactions.set('userName',userName);
+				interactions.set('message',msg);
+				interactions.save();
+				$( "td[interid='"+userName+"']" ).append("<div class='pull-left dot' title='"+msg+"'></div>"); 
+			}
+
+			function loadInteractions(){
+				var Interactions = Parse.Object.extend("Interactions");
+				var query = new Parse.Query(Interactions);
+				query.find({
+					success:function(results){
+						$(".interactions").each(function(){
+							var interactionTR = $(this);
+							var result = $.grep(results, function(e){ return e.get('userName') == interactionTR.attr("interid"); });
+
+							if(result.length>0){
+								for(var i=0;i<result.length;i++){
+									interactionTR.append("<div class='pull-left dot' title='"+result[i].get('message')+" at "+(new Date(result[i].createdAt)).toLocaleDateString()+", "+(new Date(result[i].createdAt)).toLocaleTimeString()+"'></div>");
+								}
+							}
+							});
+					},
+					error:function(error){
+
+					}
+					});
+			}
+
+
+
+
+
+
+
+
+
+
