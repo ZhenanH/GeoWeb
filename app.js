@@ -51,8 +51,15 @@ process.on('uncaughtException', function (err) {
 
 app.get('/', function(req,res){
 	//res.render('index',{title:'Home'});
-res.render('about_experiment',{
-		title:'About Us'
+res.render('download_prototype',{
+		title:'MyMove'
+		});
+});
+
+app.get('/download', function(req,res){
+	//res.render('index',{title:'Home'});
+res.render('download_prototype',{
+		title:'MyMove'
 		});
 });
 

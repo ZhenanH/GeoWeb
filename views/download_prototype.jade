@@ -1,0 +1,76 @@
+doctype html
+html
+	head
+		title #{title} - My Move Mobile
+		link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+		link(rel="stylesheet" href="http://getbootstrap.com/assets/css/docs.min.css")
+		//link(rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css")
+		meta(name="viewport" content="width=device-width, user-scalable=no initial-scale=1")
+		meta(property="og:title" content="MyMove Mobile")
+		meta(property="og:type" content="website")
+		meta(property="og:url" content="http://mymove.parseapp.com")
+		meta(property="og:description" content="Your mobile coupon wallet")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
+
+	body(style="")
+		.navbar.navbar-default.navbar-default-top(role="navigation")
+			.container
+				.navbar-header
+					//- button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+					//- 	span.sr-only Toggle navigation
+					//- 	span.icon-bar
+					//- 	span.icon-bar
+					//- 	span.icon-bar
+					a.navbar-brand
+						img(src="/images/mymovelogo120.png" style="height:50px;position:relative;top:-15px")
+						span(style="position:relative;top:-12px") MyMove
+
+				//- .navbar-collapse.collapse(style="height:1px")
+				//- 	ul.nav.navbar-nav.navbar-right
+				//- 		li 
+				//- 			a Download
+				//- 		li 
+				//- 			a About
+
+
+		.container
+			h1(style="font-size:23px") Great coupons everyday.
+			h1(style="font-size:23px") Explore deals for new places.
+			h1(style="font-size:23px") Your mobile wallet to help you save when you are moving.
+			.row(style="padding:10px")
+				a.btn.btn-success.col-xs-12(href="itms-services://?action=download-manifest&url=https://mymove.parseapp.com/v107/MyMoveWallet.plist" style="margin-bottom:20px") Download iOS application
+				h4 Other platforms are coming soon
+				.input-group
+					input.form-control#emailReminder(type="email",placeholder="youremail@mail.com")
+					span.input-group-btn
+						button.btn.btn-success(type="button", onclick="submitForEmail()") Notify me
+
+
+
+	script(type='text/javascript').
+		Parse.initialize("NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", "ncqIDz5AJwzQ0OB772n1FfnQ9SOc6A6bKz2cySwq");
+
+		function submitForEmail(){
+
+			if($("#emailReminder").val()=="")
+				alert("please enter your email");
+			else{
+
+
+			var EmailReminder = Parse.Object.extend("EmailNotify");
+			var emailReminder = new EmailReminder();
+			emailReminder.save({email: $("#emailReminder").val()}).then(function(object) {
+			alert("Thanks for your interest! We will notify you when something cool come out!");
+			});
+		}}
+
+
+
+
+
+			
+		
+
+
