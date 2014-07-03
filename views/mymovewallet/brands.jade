@@ -6,7 +6,7 @@ block content
 		a.navmenu-brand(href="#") Menu
 		ul.nav.navmenu-nav
 			li.active 
-				a Today's Deals
+				a Today's Top Coupons
 			li
 				a#localDealLink(href="./localdeals") Local Deals
 					span.badge.pull-right(style="background-color:red") New!
@@ -172,6 +172,7 @@ block content
 
 			// Send the dimensions to Parse along with the 'search' event
 			Parse.Analytics.track('saveCouopn', dimensions);
+			mixpanel.track("save coupon "+pos);
 		}
 
 		function trackCouponClick(pos){
