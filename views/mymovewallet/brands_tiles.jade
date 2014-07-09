@@ -19,9 +19,9 @@ block content
 				- if(couponData.length>=0)
 					- for (var i = 0; i < couponData.length; ++i)
 						.pin(onclick = "location.href='./coupondetail_2'", isSaved = "unSaved" position=i)
-							.couponTitle #{couponData[i].brandName}
 							img(src=src=couponData[i].brandPic)
-							p #{couponData[i].couponDes}
+							p
+								strong #{couponData[i].couponDes}
 							.saveButton(id=couponData[i].objectId) save
 							if(couponData[i].isNew)
 								.ribbon-wrapper-green(style="top:-7px;right:-6px;")
