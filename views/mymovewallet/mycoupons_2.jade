@@ -1,0 +1,176 @@
+extends mymovemobile_layout
+
+block content
+	div(style="height:50px; clear:both")
+	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
+		.container-fluid
+			.navbar-header
+				a.navbar-brand.pull-left(onclick="window.history.back()") Back
+
+
+	.container
+		.row
+			- if(thisUser.savedCoupons)
+				- for (var i = 0; i < thisUser.savedCoupons.length; ++i)
+					.col-xs-12
+						a.thumbnail.couponThumbnail(id=thisUser.savedCoupons[i])
+							.row 
+								.col-xs-4
+									.thumbnail
+										img#brandPic
+								.col-xs-8
+									.caption
+										h4.couponDes $5 Off $50+ Sitewide
+									#expireDate 
+
+			- else
+				p(style="text-align:center") No saved coupons
+								
+
+	script(type='text/javascript').
+		//mixpanel.track("check savedCoupons");
+		var couponIDList = [];
+		$(".thumbnail.couponThumbnail").each(function(){
+			var thisCoupon = this;
+			var couponID = $(this).attr("id");
+			couponIDList.push(couponID);
+		});
+
+
+		var Coupons = Parse.Object.extend("Coupons");
+		var query = new Parse.Query(Coupons);
+		//query.ascending("expirationAt");
+		query.containedIn("objectId", couponIDList);
+		query.find({
+			success: function(coupons_data) {
+				//sort
+				function compare(a,b) {
+					//console.log(new Date(a.get("expirationAt")));
+					if(a.get("expirationAt") == undefined && b.get("expirationAt")!= undefined){
+						//console.log("yes: "+a.get("expirationAt"));
+						return 1
+					}
+					if(a.get("expirationAt") != undefined && b.get("expirationAt")== undefined){
+						//console.log("null: "+a.get("expirationAt"));
+						return -1
+					}
+					if ((new Date(a.get("expirationAt"))) < (new Date(b.get("expirationAt")))) {
+						//console.log("<: "+a.get("expirationAt"));
+						return -1;
+					}
+					if ((new Date(a.get("expirationAt"))) > (new Date(b.get("expirationAt")))) {
+						//console.log("<: "+a.get("expirationAt"));
+						return 1;
+					}
+					return 0;
+					}
+
+				var coupons = coupons_data.sort(compare);
+
+				//The object was retrieved successfully.
+				$(".thumbnail.couponThumbnail").each(function(index){
+					//console.log(JSON.stringify(coupons[index]));
+					var thisCoupon = this;
+					$(thisCoupon).attr("id",coupons[index].id);
+					$(thisCoupon).attr("href","./savedcoupondetail");
+					$(thisCoupon).click(function(e){
+						sessionStorage.setItem("current_coupon", JSON.stringify(coupons[index]));	
+					});
+								
+					$(thisCoupon).find("img").attr("src",coupons[index].get("brandPic"));
+					$(thisCoupon).find("h4").text(coupons[index].get("couponDes"));
+					if(coupons[index].get("expirationAt")){
+						//console.log(coupon.get("expirationAt"));
+						var theDate = coupons[index].get("expirationAt").toLocaleDateString();
+						$(thisCoupon).find("#expireDate").text("Expiring at: "+theDate);
+
+
+						if(+coupons[index].get("expirationAt") < +(new Date(new Date().getTime()))){
+							$(thisCoupon).find("#expireDate").text("").append("<span class='expiredDate'>Expired</span>");
+							$(thisCoupon).addClass("expired").click(function(e) {
+								e.preventDefault();
+								//do other stuff when a click happens
+								});
+							
+							$(thisCoupon).find("#expireDate").append("<button class='removeButton btn btn-danger'>Remove</button>");
+							$(thisCoupon).find(".removeButton").click(function(){
+								deleteCoupon(this, $(thisCoupon).attr('id'));
+								});
+							//$(thisCoupon).attr('id')
+
+						}
+						var d = new Date();
+						var dif = Math.floor((coupons[index].get("expirationAt")-d)/1000/60/60/24);
+						
+						if(dif<=2&&dif>0){
+							$(thisCoupon).append("<div class='ribbon-wrapper-yellow'><div class='ribbon-yellow'>"+dif+" days left</div></div>");
+						}
+						if(dif==0){
+							$(thisCoupon).append("<div class='ribbon-wrapper-yellow'><div class='ribbon-yellow'>The last day</div></div>");
+						}
+
+						}
+				});
+			},
+			error: function(object, error) {
+			// The object was not retrieved successfully.
+			// error is a Parse.Error with an error code and description.
+			console.log("failed retrieving coupon");
+			}
+		});
+			
+
+
+		function deleteCoupon(deletButoon, couponToDelete){
+				//mixpanel.track("remove coupon");
+				console.log("couponid: "+couponToDelete);
+				console.log("userid: "+sessionStorage.getItem("userID"));
+				var User = Parse.Object.extend("User");
+				var query = new Parse.Query(User);
+				query.get(sessionStorage.getItem("userID"), {
+					success: function(theCurrentUser) {
+					// The object was retrieved successfully.
+						var savedCoupons = theCurrentUser.get("savedCoupons");
+
+						console.log(JSON.stringify(savedCoupons));
+						if(savedCoupons)
+							savedCoupons.splice($.inArray(couponToDelete, savedCoupons), 1);
+
+						console.log(JSON.stringify(savedCoupons));
+
+						theCurrentUser.set("savedCoupons",savedCoupons);
+
+
+						theCurrentUser.save(null,{
+							success:function(user){
+								//remove the div
+								$(deletButoon).parent().parent().parent().parent().remove();
+								},
+							error: function(user,error){
+								alert(JSON.strinhgify(error));
+							}
+							});
+					},
+					error: function(object, error) {
+					// The object was not retrieved successfully.
+					// error is a Parse.Error with an error code and description.
+					alert("cannot delete the coupon");
+					}
+				});
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

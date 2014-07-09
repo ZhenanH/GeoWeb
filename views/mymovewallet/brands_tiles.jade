@@ -2,53 +2,38 @@ extends mymovemobile_layout
 
 
 block content
-	.navmenu.navmenu-default.navmenu-fixed-left.in
-		a.navmenu-brand(href="#") Menu
-		ul.nav.navmenu-nav
-			li.active 
-				a Today's Top Coupons
-			li
-				a#localDealLink(href="./localdeals") Local Deals
-					span.badge.pull-right(style="background-color:red") New!
+
 
 	.canvas.canvas-slide
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
-			button.navbar-toggle(type="button", data-toggle="offcanvas", data-recalc="false", data-target=".navmenu",data-canvas=".canvas", onclick="trackMenu()")
-				span.icon-bar
-				span.icon-bar
-				span.icon-bar
+
 
 			.container-fluid
 				.navbar-header
-					a.navbar-brand.pull-right#myCouponLink(href="./mycoupons") Saved
+					a.navbar-brand.pull-right#myCouponLink(href="./mycoupons_2") Saved
 						span.badge.pull-right#savedCouponCount(style="margin-left:4px") 0
 		.updateDiv last update pull to load latest coupons
-		.container.coupons.multi-columns-row
+		#wrapper
+			#columns
 
 				- if(couponData.length>=0)
 					- for (var i = 0; i < couponData.length; ++i)
-							.col-xs-6.col-sm-4.col-md-3.col-lg-3
-								.thumbnail(onclick = "location.href='./coupondetail'", isSaved = "unSaved" position=i)
-									img.img-responsive(src=couponData[i].brandPic)
-									.caption
-										h4 #{couponData[i].couponDes}
-									.saveButton(id=couponData[i].objectId) save
-									if(couponData[i].isNew)
-										.ribbon-wrapper-green
-											.ribbon-green New
-
+						.pin(onclick = "location.href='./coupondetail_2'", isSaved = "unSaved" position=i)
+							.couponTitle #{couponData[i].brandName}
+							img(src=src=couponData[i].brandPic)
+							p #{couponData[i].couponDes}
+							.saveButton(id=couponData[i].objectId) save
+							if(couponData[i].isNew)
+								.ribbon-wrapper-green(style="top:-7px;right:-6px;")
+									.ribbon-green New
 
 
 	script(type='text/javascript').
-		mixpanel.track("view today's deal page");
-
-		
-		$("#localDealLink").attr("href","./localdeals?latlng="+sessionStorage.getItem('currentLatLng')+"&locationString="+sessionStorage.getItem('currentLocationString'));
 		function checkCoupons(){
 			if(userObjID){
 
 				//update my coupon link
-				$("#myCouponLink").attr("href","./mycoupons?userObjID="+userObjID);
+				$("#myCouponLink").attr("href","./mycoupons_2?userObjID="+userObjID);
 				//alert(userObjID);
 				//check saved coupon
 				$(".saveButton").each(function(){
@@ -86,12 +71,13 @@ block content
 					});
 			}
 		}
+
+
 		
-
 	script(type='text/javascript').
-		$(".thumbnail").click(function(e){
+		$(".pin").click(function(e){
 
-			trackCouponClick($(this).attr("position"));
+			
 			//marked saved coupons
 			sessionStorage.setItem("is_saved", $(this).attr("isSaved"));
 
@@ -119,13 +105,14 @@ block content
 			}
 			});
 
+
 		$(".saveButton").click(function(e){
 
-			mixpanel.track("save coupon on main page");
+			//mixpanel.track("save coupon on main page");
 			e.stopPropagation(); 
 			var thisButton = this;
 			
-				trackSaveButton($(this).attr("id"),$(this).parent().attr("position"));
+				//trackSaveButton($(this).attr("id"),$(this).parent().attr("position"));
 				var User = Parse.Object.extend("User");
 				var query = new Parse.Query(User);
 				query.get(userObjID, {
@@ -161,43 +148,9 @@ block content
 
 			});
 
+
 		//update time
 		$(".updateDiv").text("last update on "+ (new Date()).toLocaleDateString()+",  "+(new Date()).toLocaleTimeString());
-
-		function trackSaveButton(couponId,pos){
-			var dimensions = {
-				userID: userObjID,
-				couponSaved: couponId,
-				position: pos
-			};
-
-			// Send the dimensions to Parse along with the 'search' event
-			Parse.Analytics.track('saveCouopn', dimensions);
-			mixpanel.track("save coupon "+pos);
-		}
-
-		function trackCouponClick(pos){
-			var dimensions = {
-				position: pos
-			};
-
-			// Send the dimensions to Parse along with the 'search' event
-			Parse.Analytics.track('clickCouopn', dimensions);
-		}
-
-		function trackMenu(){
-			mixpanel.track("click on menu");
-		}
-
-
-		
-
-
-
-
-
-
-
 
 
 

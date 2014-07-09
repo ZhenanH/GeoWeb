@@ -1,0 +1,109 @@
+extends mymovemobile_layout
+
+block content
+	div(style="height:50px; clear:both")
+	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
+		.container-fluid
+			.navbar-header
+				a.navbar-brand.pull-left(href="./brands_tiles") Back
+
+	.container
+		.row
+			.col-xs-12
+				.thumbnail
+					img.detailCouponImage.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
+					.caption
+						h4 Up To 70% Off Father's Day Finds 
+					#expireDate  
+					.couponCodes No code needed
+					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
+
+	script(type='text/javascript').
+		//mixpanel.track("check coupon detail from main page");
+		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
+		//alert(currentCoupon);
+		$(".thumbnail").each(function(){
+				$(this).find("img").attr("src",currentCoupon.brandPic);
+				$(this).find("h4").text(currentCoupon.couponDes);
+				$(this).find(".couponCodes").text("Code: "+currentCoupon.couponCode);
+				$(this).find("#howToUse").text(currentCoupon.howTo);
+				if(sessionStorage.getItem("is_saved")=="unSaved")
+					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"''>Save</div>");
+				if(currentCoupon.expirationAt){
+					//console.log((new Date(currentCoupon.expirationAt.iso)).toLocaleDateString());
+					var theDate = (new Date(currentCoupon.expirationAt.iso)).toLocaleDateString();
+					$(this).find("#expireDate").text("Expiring at: "+theDate);
+				}
+				if(currentCoupon.websiteURL){
+					$(this).append("<div class='goShoppingButton' url='"+currentCoupon.websiteURL+"'>Go shop online</div>");					
+				}
+
+			});
+		
+		$(".goShoppingButton").click(function(e){
+			//alert($(this).attr("url"));
+			//mixpanel.track("go shopping online")
+			sendToApp("openWebView", $(this).attr("url"));
+			});
+
+		$(".saveButton").click(function(e){
+			
+			//mixpanel.track("save coupon on detail page");
+			var thisButton = this;
+			
+				trackSaveButton($(thisButton).attr("id"));
+				var User = Parse.Object.extend("User");
+				var query = new Parse.Query(User);
+				query.get(sessionStorage.getItem("userID"), {
+					success: function(theCurrentUser) {
+					// The object was retrieved successfully.
+						var savedCoupons = theCurrentUser.get("savedCoupons");
+
+						if(savedCoupons)
+							savedCoupons.push($(thisButton).attr("id"));
+						else
+							savedCoupons = [$(thisButton).attr("id")];	
+
+						theCurrentUser.set("savedCoupons",savedCoupons);
+
+						theCurrentUser.save(null,{
+							success:function(user){
+								$(thisButton).css('background-color','#ddd').text('saved');
+								$(thisButton).off('click');
+								},
+							error: function(user,error){
+								alert(JSON.strinhgify(error));
+							}
+							});
+					},
+					error: function(object, error) {
+					// The object was not retrieved successfully.
+					// error is a Parse.Error with an error code and description.
+					alert("download the MyMove app to save coupons");
+					}
+				});
+
+
+			});
+
+			function trackSaveButton(couponId){
+				var dimensions = {
+					userID: sessionStorage.getItem("userID"),
+					couponSaved: couponId
+				};
+
+				// Send the dimensions to Parse along with the 'search' event
+				Parse.Analytics.track('saveCouopn', dimensions);
+			}
+
+
+
+
+
+
+
+
+
+
+
+

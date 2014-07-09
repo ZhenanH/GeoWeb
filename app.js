@@ -156,6 +156,24 @@ app.namespace('/mymovemobile',function(){
 		res.redirect('/mymovemobile/brands');	
 	});
 
+	app.get('/brands_tiles', function(req,res){
+		var params = {
+			where:{isPromoting: true},
+			order:'-createdAt'
+		};
+
+		kaiseki.getObjects('Coupons',params,function(err,response,body,success){
+			if(response)
+  				console.log('retreive ', body.length + ' coupons');
+			
+  			res.render('mymovewallet/brands_tiles',{
+				title:'Movers',
+				couponData: body
+			});
+		});
+
+	});
+
 	app.get('/brands', function(req,res){
 
 		var params = {
@@ -190,11 +208,26 @@ app.namespace('/mymovemobile',function(){
 		
 	});
 
+		app.get('/mycoupons_2', function(req,res){
+		var url_parts = url.parse(req.url, true);
+		var userObjID = url_parts.query.userObjID;
+		console.log(userObjID);
+		kaiseki.getUser(userObjID, function(err, response, body, success) {
+  			console.log('user info = ', body);
+  			res.render('mymovewallet/mycoupons_2',{
+			title:'Movers',
+			thisUser:body
+			});
+		});
+		
+	});
+
 	app.get('/localdeals', function(req,res){
 		var url_parts = url.parse(req.url, true);
 		var latlng = url_parts.query.latlng;
 		var locationString = url_parts.query.locationString;
 		console.log(latlng+", "+locationString);
+
 		var requestUrl = "http://lesserthan.com/api.getDealsZip/06460/json";
 		if(locationString!="null")
 			requestUrl = "http://lesserthan.com/api.getDealsCity"+locationString+"json";
@@ -218,14 +251,56 @@ app.namespace('/mymovemobile',function(){
 		
 	});
 
+
+
+		app.get('/localdeals_native', function(req,res){
+		var url_parts = url.parse(req.url, true);
+		var latlng = url_parts.query.latlng;
+		var locationString = url_parts.query.locationString;
+		
+		
+		var requestUrl = "http://lesserthan.com/api.getDealsZip/06460/json";
+
+		if(latlng!="null"){
+			var lat = latlng.split(',')[0];
+			var lng = latlng.split(',')[1];
+			requestUrl = "http://lesserthan.com/api.getDealsLatLon/json/?lat="+lat+"&lon="+lng;
+		}
+		console.log(requestUrl);
+		request({"rejectUnauthorized":false, "url":requestUrl},function (error, response, body){
+			if (!error && response.statusCode == 200) {
+    		//console.log(response.body); 
+			res.render('mymovewallet/localdeals_2',{
+			title:'Movers',
+			localdeals:JSON.parse(response.body)
+			});
+  			}
+		});
+
+
+		
+	});
+
 	app.get('/coupondetail', function(req,res){
 		res.render('mymovewallet/coupondetail',{
 		title:'Movers'
 		});
 	});
 
+		app.get('/coupondetail_2', function(req,res){
+		res.render('mymovewallet/coupondetail_2',{
+		title:'Movers'
+		});
+	});
+
 	app.get('/savedcoupondetail', function(req,res){
 		res.render('mymovewallet/savedcoupondetail',{
+		title:'Movers'
+		});
+	});
+
+		app.get('/savedcoupondetail_2', function(req,res){
+		res.render('mymovewallet/savedcoupondetail_2',{
 		title:'Movers'
 		});
 	});

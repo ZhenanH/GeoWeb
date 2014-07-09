@@ -1,0 +1,174 @@
+extends mymovemobile_layout
+
+block content
+
+	.canvas.canvas-slide
+		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
+			
+			.navbar-brand#currentlocationTag Milford, CT
+			button.pull-right.navbar-toggle#locationBtn
+				span.glyphicon.glyphicon-map-marker
+			div(style="height:0px; overflow:hidden")
+				select( title="Choose Your Location", id="choose")
+					option Select Below
+					optgroup
+						option(onclick="/") My Current Location
+					optgroup(id="states")
+
+
+
+		.container
+			.row(id="localdealList")
+				- if(localdeals.items)
+					- for (var i = 0; i < localdeals.items.length; ++i)
+						.col-xs-12
+							a.thumbnail.couponThumbnail(link=localdeals.items[i].deal.link)
+								.row 
+									.col-xs-4
+										img.localDealPic(src=localdeals.items[i].deal.image_thumb_retina)
+									.col-xs-8
+										.dealTitle #{localdeals.items[i].merchant.name}
+										.dealLocation #{localdeals.items[i].merchant.address}, #{localdeals.items[i].merchant.city}, #{localdeals.items[i].merchant.state}
+										.row
+											.dealSummary
+												.col-xs-4 Price:
+													.span(style="font-size:16px") #{localdeals.items[i].deal.price}
+												.col-xs-4 Discount: 
+													.span(style="font-size:16px") #{localdeals.items[i].deal.discount}
+												.col-xs-4 Source: #{localdeals.items[i].deal.source}
+
+
+								
+
+	script(type='text/javascript').
+		//mixpanel.track("view local deals")
+		//console.log(sessionStorage.getItem("currentLocationString")+", "+sessionStorage.getItem("currentCity"));
+		//console.log(sessionStorage.getItem("currentLocationString").split('/')[2]+", "+sessionStorage.getItem("currentCity"));
+
+		if(sessionStorage.getItem("currentLocationString")!=null){
+			$("#currentlocationTag").text(sessionStorage.getItem("currentLocationString").split('/')[2]);
+		}
+		if(sessionStorage.getItem("currentCity")!=null){
+			$("#currentlocationTag").text(sessionStorage.getItem("currentCity"));
+		}
+
+		
+
+		function configureWebOpen(){
+			$(".couponThumbnail").click(function(e){
+
+			//mixpanel.track("view single local deal")
+			sendToApp("openWebView", $(this).attr("link"));
+			});
+		}
+
+		configureWebOpen();
+
+		$("#locationBtn").click(function(e){
+
+			$("#choose").focus();
+
+			});
+
+		$.getJSON("http://lesserthan.com/api.getMarkets/json/?callback=?", function(data) {
+			var optionGroups = {};
+			$.each(data.items,function(i){
+				if(!optionGroups[data.items[i].region]){
+					optionGroups[data.items[i].region]=[data.items[i].locality];
+				}
+				else{
+					optionGroups[data.items[i].region].push(data.items[i].locality);
+				}
+
+			});
+
+			for(var key in optionGroups){
+				$("#states").append("<optgroup id='"+key+"' label='"+key+"'></optgroup>");
+				$.each(optionGroups[key],function(i){
+					$("#"+key).append("<option value='/"+key+"/"+optionGroups[key][i]+"/'>"+optionGroups[key][i]+"</option>");
+					});
+			}
+										
+		});
+
+		$("#choose").change(function(){
+			//alert($("select option:selected").val());
+			//$("#currentlocationTag").text($("select option:selected").text());
+			$("#localdealList").empty();
+
+			if($("select option:selected").val()=="My Current Location"){
+
+				getCurrentLocation();
+			}
+			else{
+				//mixpanel.track("pick current location");
+				sessionStorage.setItem("currentLocationString",$("select option:selected").val());
+				loadLocalDeals($("select option:selected").val(),null,null);
+				$("#currentlocationTag").text($("select option:selected").text());
+			}
+			$(this).blur();
+		});
+
+		function loadLocalDeals(locationString,lat,lng){
+			var apiString = "";
+			if(locationString)
+				apiString = "http://lesserthan.com/api.getDealsCity"+locationString+"json/?callback=?";
+			if(lat&&lng)
+				apiString = "http://lesserthan.com/api.getDealsLatLon/json/?lat="+lat+"&lon="+lng+"&callback=?";
+
+			$.getJSON(apiString, function(data) {
+				if(data.items.length>0){
+					//$("#currentlocationTag").text(data.items[0].region.locality);
+					$.each(data.items,function(i){
+					$("#localdealList").append("<div class='col-xs-12'><a class='thumbnail couponThumbnail' link='"+data.items[i].deal.link+"'><div class='row'><div class='col-xs-4'><img class='localDealPic' src='"+data.items[i].deal.image_thumb_retina+"'/></div><div class='col-xs-8'><div class='dealTitle'>"+data.items[i].merchant.name+"</div><div class='dealLocation'>"+data.items[i].merchant.address+", "+data.items[i].merchant.city+", "+data.items[i].merchant.state+"</div><div class='row'><div class='dealSummary'><div class='col-xs-4'>Price: <span style='font-size:16px'>"+data.items[i].deal.price+"</span></div><div class='col-xs-4'>Discount: <span style='font-size:16px'>"+data.items[i].deal.discount+"</span></div><div class='col-xs-4'>Source: "+data.items[i].deal.source+"</div></div></div></div></div></a></div>");
+					});
+				}
+				else{
+					//$("#currentlocationTag").text("no results");
+
+				}
+				configureWebOpen();
+			});
+		}
+
+		function getCurrentLocation(){
+
+			//mixpanel.track("get current location");
+			sendToApp("locationPermission", "");
+		}
+
+		function setCurrentLocation(lat,lng){
+			//mixpanel.track("set current location");
+			$("#currentlocationTag").text("Search...");
+			sessionStorage.setItem("currentLatLng",lat+","+lng);
+			loadLocalDeals(null,lat,lng);
+		}
+
+		function setCurrentLocationTitle(location){
+			//lert(location);
+			$("#currentlocationTag").text(location);
+			sessionStorage.setItem("currentCity",location);
+		}
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
