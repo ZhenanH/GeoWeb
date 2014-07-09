@@ -5,7 +5,7 @@ block content
 	.canvas.canvas-slide
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
 			
-			.navbar-brand#currentlocationTag Milford, CT
+			.navbar-brand#currentlocationTag 
 			button.pull-right.navbar-toggle#locationBtn
 				span.glyphicon.glyphicon-map-marker
 			div(style="height:0px; overflow:hidden")
@@ -104,7 +104,7 @@ block content
 				//mixpanel.track("pick current location");
 				sessionStorage.setItem("currentLocationString",$("select option:selected").val());
 				loadLocalDeals($("select option:selected").val(),null,null);
-				$("#currentlocationTag").text($("select option:selected").text());
+				$("#currentlocationTag").text($("select option:selected").val().split('/')[2]+", "+$("select option:selected").val().split('/')[1]);
 			}
 			$(this).blur();
 		});
