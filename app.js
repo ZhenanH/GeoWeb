@@ -222,6 +222,15 @@ app.namespace('/mymovemobile',function(){
 		
 	});
 
+		app.get('/policy', function(req,res){
+		
+  			res.render('mymovewallet/policy',{
+			title:'Movers'
+			});
+
+		
+	});
+
 	app.get('/localdeals', function(req,res){
 		var url_parts = url.parse(req.url, true);
 		var latlng = url_parts.query.latlng;
