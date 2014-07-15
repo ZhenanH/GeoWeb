@@ -194,6 +194,26 @@ app.namespace('/mymovemobile',function(){
 		
 	});
 
+		app.get('/brands2', function(req,res){
+
+		var params = {
+			where:{isPromoting: true},
+			order:'-createdAt'
+		};
+
+		kaiseki.getObjects('Coupons',params,function(err,response,body,success){
+			if(response)
+  				console.log('retreive ', body.length + ' coupons');
+			
+  			res.render('mymovewallet/brands2',{
+				title:'Movers',
+				couponData: body
+			});
+		});
+
+		
+	});
+
 	app.get('/mycoupons', function(req,res){
 		var url_parts = url.parse(req.url, true);
 		var userObjID = url_parts.query.userObjID;

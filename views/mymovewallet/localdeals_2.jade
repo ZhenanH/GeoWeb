@@ -41,7 +41,7 @@ block content
 								
 
 	script(type='text/javascript').
-		//mixpanel.track("view local deals")
+		mixpanel.track("view local deals")
 		//console.log(sessionStorage.getItem("currentLocationString")+", "+sessionStorage.getItem("currentCity"));
 		//console.log(sessionStorage.getItem("currentLocationString").split('/')[2]+", "+sessionStorage.getItem("currentCity"));
 
@@ -57,7 +57,7 @@ block content
 		function configureWebOpen(){
 			$(".couponThumbnail").click(function(e){
 
-			//mixpanel.track("view single local deal")
+			mixpanel.track("view single local deal")
 			sendToApp("openWebView", $(this).attr("link"));
 			});
 		}
@@ -101,7 +101,7 @@ block content
 				getCurrentLocation();
 			}
 			else{
-				//mixpanel.track("pick current location");
+				mixpanel.track("pick current location");
 				sessionStorage.setItem("currentLocationString",$("select option:selected").val());
 				loadLocalDeals($("select option:selected").val(),null,null);
 				$("#currentlocationTag").text($("select option:selected").val().split('/')[2]+", "+$("select option:selected").val().split('/')[1]);
@@ -133,12 +133,12 @@ block content
 
 		function getCurrentLocation(){
 
-			//mixpanel.track("get current location");
+			mixpanel.track("get current location");
 			sendToApp("locationPermission", "");
 		}
 
 		function setCurrentLocation(lat,lng){
-			//mixpanel.track("set current location");
+			mixpanel.track("set current location");
 			$("#currentlocationTag").text("Search...");
 			sessionStorage.setItem("currentLatLng",lat+","+lng);
 			loadLocalDeals(null,lat,lng);

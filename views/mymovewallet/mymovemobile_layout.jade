@@ -19,7 +19,7 @@ html
 		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")
 
 		script(type='text/javascript').
-			Parse.initialize("NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", "ncqIDz5AJwzQ0OB772n1FfnQ9SOc6A6bKz2cySwq"); real
+			Parse.initialize("NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", "ncqIDz5AJwzQ0OB772n1FfnQ9SOc6A6bKz2cySwq"); //real
 			//Parse.initialize("NfzjaOxENPzKYkqKogb6gc0yNqQmS7rGqZ3N3rn5", "ncqIDz5AJwzQ0OB772n1FfnQ9SOc6A6bKz2cySwq"); //fake
 
 		script(type="text/javascript").
@@ -95,10 +95,12 @@ html
 
 		script(type='text/javascript').
 			function loginUser(){
+				// alert("here");
+				console.log(userObjID);
+				// console.log(currentUser);
+				// console.log(userName);
 				currentUser = Parse.User.current();
-				//alert(userObjID);
-				//alert(currentUser);
-				//alert(userName);
+				
 				mixpanel.identify(userObjID);
 				mixpanel.people.set({
 					"$last_login": new Date(),         // properties can be dates...
@@ -136,11 +138,7 @@ html
 			}; 
 
 		
-		script(type='text/javascript').
-			//clicktale
-			document.write(unescape("%3Cscript%20src='"+(document.location.protocol=='https:'?"https://cdnssl.clicktale.net/www07/ptc/58dcaaad-ef2e-49b6-88ea-cbf15df509de.js":"http://cdn.clicktale.net/www07/ptc/58dcaaad-ef2e-49b6-88ea-cbf15df509de.js")+"'%20type='text/javascript'%3E%3C/script%3E"));
-			
-
+		
 		//sendToApp("ios-log", "from js");
 			//loginUser();
 			//checkCoupons();

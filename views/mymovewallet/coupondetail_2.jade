@@ -5,7 +5,7 @@ block content
 	.nav.navbar-inverse.navbar-fixed-top(role="navigation")
 		.container-fluid
 			.navbar-header
-				a.navbar-brand.pull-left(href="./brands_tiles") Back
+				a.navbar-brand.pull-left(href="./brands2") Back
 
 	.container
 		.row
@@ -19,7 +19,7 @@ block content
 					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
 
 	script(type='text/javascript').
-		//mixpanel.track("check coupon detail from main page");
+		mixpanel.track("check coupon detail from main page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
 		//alert(currentCoupon);
 		$(".thumbnail").each(function(){
@@ -42,13 +42,13 @@ block content
 		
 		$(".goShoppingButton").click(function(e){
 			//alert($(this).attr("url"));
-			//mixpanel.track("go shopping online")
+			mixpanel.track("go shopping online")
 			sendToApp("openWebView", $(this).attr("url"));
 			});
 
 		$(".saveButton").click(function(e){
 			
-			//mixpanel.track("save coupon on detail page");
+			mixpanel.track("save coupon on detail page");
 			var thisButton = this;
 			
 				trackSaveButton($(thisButton).attr("id"));

@@ -28,7 +28,7 @@ block content
 								
 
 	script(type='text/javascript').
-		//mixpanel.track("check savedCoupons");
+		mixpanel.track("check savedCoupons");
 		var couponIDList = [];
 		$(".thumbnail.couponThumbnail").each(function(){
 			var thisCoupon = this;
@@ -122,7 +122,7 @@ block content
 
 
 		function deleteCoupon(deletButoon, couponToDelete){
-				//mixpanel.track("remove coupon");
+				mixpanel.track("remove coupon");
 				console.log("couponid: "+couponToDelete);
 				console.log("userid: "+sessionStorage.getItem("userID"));
 				var User = Parse.Object.extend("User");
