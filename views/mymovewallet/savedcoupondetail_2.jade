@@ -20,13 +20,17 @@ block content
 			
 
 	script(type='text/javascript').
-		//mixpanel.track("check coupon detail from savedcoupon page");
+		mixpanel.track("check coupon detail from savedcoupon page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
 		//console.log(currentCoupon);
 		$(".thumbnail").each(function(){
 				$(this).find("img").attr("src",currentCoupon.brandPic);
 				$(this).find("h4").text(currentCoupon.couponDes);
 				$(this).find(".couponCodes").text("Code: "+currentCoupon.couponCode);
+				if(currentCoupon.openCouponLink){
+					$(this).find(".couponCodes").empty();
+					$(this).find(".couponCodes").append("<button type='button' url='"+currentCoupon.openCouponLink+"' class='btn btn-success openCouponLink'>Open Coupon</button>");
+				}
 				$(this).find("#howToUse").text(currentCoupon.howTo);
 				if(currentCoupon.expirationAt){
 					//console.log((new Date(currentCoupon.expirationAt.iso)).toLocaleDateString());
@@ -41,11 +45,15 @@ block content
 
 		$(".goShoppingButton").click(function(e){
 			//alert($(this).attr("url"));
-			//mixpanel.track("go shopping online")
+			mixpanel.track("go shopping online")
 			sendToApp("openWebView", $(this).attr("url"));
 			});
 		
-
+		$(".openCouponLink").click(function(e){
+			//alert($(this).attr("url"));
+			mixpanel.track("open coupon link");
+			sendToApp("openWebView", $(this).attr("url"));
+			});
 
 
 

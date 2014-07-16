@@ -72,7 +72,7 @@ block content
 					//console.log(JSON.stringify(coupons[index]));
 					var thisCoupon = this;
 					$(thisCoupon).attr("id",coupons[index].id);
-					$(thisCoupon).attr("href","./savedcoupondetail");
+					$(thisCoupon).attr("href","./savedcoupondetail_2");
 					$(thisCoupon).click(function(e){
 						sessionStorage.setItem("current_coupon", JSON.stringify(coupons[index]));	
 					});
