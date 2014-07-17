@@ -19,6 +19,7 @@ html
 			table.table
 				tr
 					th User
+					th Created At
 					th Last Update
 					th Coupons
 					th Action
@@ -27,6 +28,7 @@ html
 					- for(var i=0;i<users.length;i++)
 						tr(class="tableRow")
 							td #{users[i].remark}
+							td #{new Date(users[i].createdAt).toLocaleDateString() + ", "+ new Date(users[i].createdAt).toLocaleTimeString()}
 							td #{new Date(users[i].updatedAt).toLocaleDateString() + ", "+ new Date(users[i].updatedAt).toLocaleTimeString()}
 							- if(users[i].savedCoupons)
 								td(class="coupons", couponTag = JSON.stringify(users[i].savedCoupons))

@@ -6,8 +6,12 @@ block content
 		.nav.navbar-inverse.navbar-fixed-top.canvas-slide(role="navigation")
 			
 			.navbar-brand#currentlocationTag 
+			button.pull-right.navbar-toggle#mapBtn
+				span.glyphicon.glyphicon-globe			
 			button.pull-right.navbar-toggle#locationBtn
 				span.glyphicon.glyphicon-map-marker
+	
+
 			div(style="height:0px; overflow:hidden")
 				select( title="Choose Your Location", id="choose")
 					option Select Below
@@ -41,6 +45,7 @@ block content
 								
 
 	script(type='text/javascript').
+		var localDealsObject =JSON.stringify(!{JSON.stringify(localdeals.items)});
 		mixpanel.track("view local deals")
 		//console.log(sessionStorage.getItem("currentLocationString")+", "+sessionStorage.getItem("currentCity"));
 		//console.log(sessionStorage.getItem("currentLocationString").split('/')[2]+", "+sessionStorage.getItem("currentCity"));
@@ -67,6 +72,12 @@ block content
 		$("#locationBtn").click(function(e){
 
 			$("#choose").focus();
+
+			});
+
+		$("#mapBtn").click(function(e){
+
+			openMapView();
 
 			});
 
@@ -104,7 +115,7 @@ block content
 				mixpanel.track("pick current location");
 				sessionStorage.setItem("currentLocationString",$("select option:selected").val());
 				loadLocalDeals($("select option:selected").val(),null,null);
-				$("#currentlocationTag").text($("select option:selected").val().split('/')[2]+", "+$("select option:selected").val().split('/')[1]);
+				$("#currentlocationTag").text($("select option:selected").val().split('/')[2]);
 			}
 			$(this).blur();
 		});
@@ -119,6 +130,7 @@ block content
 			$.getJSON(apiString, function(data) {
 				if(data.items.length>0){
 					//$("#currentlocationTag").text(data.items[0].region.locality);
+					localDealsObject = JSON.stringify(data.items);
 					$.each(data.items,function(i){
 					$("#localdealList").append("<div class='col-xs-12'><a class='thumbnail couponThumbnail' link='"+data.items[i].deal.link+"'><div class='row'><div class='col-xs-4'><img class='localDealPic' src='"+data.items[i].deal.image_thumb_retina+"'/></div><div class='col-xs-8'><div class='dealTitle'>"+data.items[i].merchant.name+"</div><div class='dealLocation'>"+data.items[i].merchant.address+", "+data.items[i].merchant.city+", "+data.items[i].merchant.state+"</div><div class='row'><div class='dealSummary'><div class='col-xs-4'>Price: <span style='font-size:16px'>"+data.items[i].deal.price+"</span></div><div class='col-xs-4'>Discount: <span style='font-size:16px'>"+data.items[i].deal.discount+"</span></div><div class='col-xs-4'>Source: "+data.items[i].deal.source+"</div></div></div></div></div></a></div>");
 					});
@@ -151,7 +163,13 @@ block content
 		}
 
 
+		function openMapView(){
 
+			mixpanel.track("open local map view");
+			//console.log(JSON.stringify(!{JSON.stringify(localdeals.items)}));
+			sendToApp("openMapView", localDealsObject);
+			//var allCoupon = !{JSON.stringify(couponData)};
+		}
 
 
 
