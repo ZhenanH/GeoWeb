@@ -134,6 +134,7 @@ block content
 								$(thisButton).css('background-color','#ddd').text('saved');
 								$(thisButton).off('click');
 								$("#savedCouponCount").text(savedCoupons.length);
+								$(thisButton).parent().attr("isSaved","saved");
 								},
 							error: function(user,error){
 								alert(JSON.strinhgify(error));
@@ -179,7 +180,6 @@ block content
 		}
 
 
-		
 
 
 
