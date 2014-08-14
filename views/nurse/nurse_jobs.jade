@@ -10,14 +10,16 @@ block content
 			tr
 				th(style='padding:35px') Nurse
 				th(style='padding:35px') Patient Location
+				th(style='padding:35px') Patient 
 				th(style='padding:35px') Visiting Status
 				th(style='padding:35px') Starting Time
 				th(style='padding:35px') End Time
 				th(style='padding:35px') Duration(minutes)
 		
 		button(onclick="refresh()") Refresh Table
+		button(onclick="goSim()") Go to simulation
 	br
-	
+		
 	
 	.container
 		h2#mapTitle 
@@ -26,6 +28,13 @@ block content
 	script(type='text/javascript').
 		var total;
 
+		function goSim(){
+			$.get("http://75.101.129.49/HCare/getnurse?searchtype=id&searchvalue="+globalID, function(d){
+				console.log(JSON.stringify(d));
+				window.location.href = "http://75.101.129.49/HCare/locationsim.jsp?nurseid="+d[0].id+"&visitid="+d[0].currentVisitId;
+				});
+
+		}
 
 		function loadData(){
 			$("#nurseTable").find("tr:gt(0)").remove();
@@ -59,9 +68,9 @@ block content
 											var d = data[nurse]["jobs"];
 											console.log("d:"+JSON.stringify(d));
 											if(d[visit].status=="In Transit")
-												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td style='color:green'>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
+												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td>"+d[visit].name+"</td><td style='color:green'>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
 											else
-												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
+												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td>"+d[visit].name+"</td><td>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
 
 											}
 										}
@@ -111,7 +120,7 @@ block content
 
 						//- 	//console.log("normal "+d[visit].status);
 							var marker = L.marker([d[visit].lat, d[visit].lng]).addTo(map);
-							marker.bindPopup(d[visit].street).openPopup();
+							marker.bindPopup(d[visit].street);
 							markers.push(marker);
 							//- }
 							
@@ -156,7 +165,8 @@ block content
 		}).addTo(map);
 
 		var greenIcon = L.icon({
-			iconUrl: '/images/user.png'
+			iconUrl: '/images/user.png',
+			iconAnchor:   [20, 40],
 		});
 
 		var targetIcon = L.icon({
