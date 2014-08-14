@@ -1,0 +1,45 @@
+extends nurse_layout
+
+block content
+
+	.container
+		#map(style="height:800px")
+
+	script(type='text/javascript').
+		function getUrlParameter(sParam)
+			{
+				var sPageURL = window.location.search.substring(1);
+				var sURLVariables = sPageURL.split('&');
+				for (var i = 0; i < sURLVariables.length; i++) 
+			{
+				var sParameterName = sURLVariables[i].split('=');
+				if (sParameterName[0] == sParam) 
+				{
+					return sParameterName[1];
+				}
+			}
+		}
+		var map = L.map('map').setView([51.505, -0.09], 13);
+		L.tileLayer('http://{s}.tiles.mapbox.com/v3/examples.map-i86knfo3/{z}/{x}/{y}.png', {
+			maxZoom: 18
+		}).addTo(map);
+
+		var greenIcon = L.icon({
+			iconUrl: '/images/user.png'
+		});
+
+		var marker = L.marker([51.5, -0.09]).addTo(map);
+
+		$.get("http://75.101.129.49/HCare/getvisits?keytype=nurse&keyvalue="+getUrlParameter("nurseID"),function(d){
+			console.log(JSON.stringify(d));
+				for(var visit in d){
+					var marker = L.marker([d[visit].lat, d[visit].lng]).addTo(map);
+					marker.bindPopup(d[visit].street).openPopup();
+				}
+			});
+
+		$.get("http://75.101.129.49/HCare/getnurse?searchtype=id&searchvalue="+getUrlParameter("nurseID"),function(d){
+			console.log(JSON.stringify(d));
+			map.setView([d[0].lastLat, d[0].lastLng], 16);
+			L.marker([d[0].lastLat, d[0].lastLng], {icon: greenIcon}).addTo(map);
+			});

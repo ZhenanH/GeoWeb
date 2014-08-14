@@ -1,0 +1,172 @@
+extends nurse_layout
+
+block content
+
+	.container
+		h1 ABC Visiting Nurse Assignment
+		h2 Date: 
+
+		table#nurseTable( border="1")
+			tr
+				th(style='padding:35px') Nurse
+				th(style='padding:35px') Patient Location
+				th(style='padding:35px') Visiting Status
+				th(style='padding:35px') Starting Time
+				th(style='padding:35px') End Time
+				th(style='padding:35px') Duration(minutes)
+		
+		button(onclick="refresh()") Refresh Table
+	br
+	
+	
+	.container
+		h2#mapTitle 
+		#map(style="height:500px")
+
+	script(type='text/javascript').
+		var total;
+
+
+		function loadData(){
+			$("#nurseTable").find("tr:gt(0)").remove();
+			$.get("http://75.101.129.49/HCare/getnurse?searchtype=all",function(data){
+				total = data;
+				for(var visit in data){
+					(function(k){
+						$.get("http://75.101.129.49/HCare/getvisits?keytype=nurse&keyvalue="+data[k].id+"&lat=39.742489&lng=-104.996567", function(d){
+							total[k]["jobs"]=d;						
+							if(k==data.length-1)
+							{
+								//console.log("using: "+JSON.stringify(total));
+								for(var nurse in total){
+									var rowspan = 2;
+									//console.log("jobs:"+JSON.stringify(total[nurse]['jobs']));
+									if(total[nurse]['jobs'])
+										rowspan = total[nurse]['jobs'].length+1;
+
+									if(rowspan==0)
+										rowspan=2;
+
+									console.log("rowspan: "+rowspan);	
+									$("#nurseTable").append("<tr><th rowspan='"+rowspan+"'><a onclick='loadMap("+total[nurse].id+",\x22"+total[nurse].name+"\x22)'>"+total[nurse].name+"</a></th></tr>");
+										if(total[nurse]["jobs"]==undefined){
+											$("#nurseTable").find("tr:gt(0)").remove();
+											loadData();
+											break;
+										}
+										if(total[nurse]["jobs"].length>=1){
+										for(var visit in data[nurse]["jobs"]){
+											var d = data[nurse]["jobs"];
+											console.log("d:"+JSON.stringify(d));
+											if(d[visit].status=="In Transit")
+												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td style='color:green'>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
+											else
+												$("#nurseTable").append("<tr><td>"+d[visit].street+", "+d[visit].city+", "+d[visit].state+"</td><td>"+d[visit].status+"</td><td>"+d[visit].startTime+"</td><td>"+d[visit].endTime+"</td><td>"+Math.round(Math.abs((new Date(d[visit].endTime)) - (new Date(d[visit].startTime))) / 1000/60)+"</td></tr>");
+
+											}
+										}
+										else
+											{
+												//$("#nurseTable").append("<tr><td>na</td><td>na</td><td>na</td><td>na</td><td>na</td></tr>");
+												
+											}
+									}
+								
+							}
+						});
+
+				})(visit);
+
+
+			}
+			
+			});
+		}
+		var globalID;
+		var gloableName;
+		var markers = new Array();
+		var userLocation;
+
+		function loadMap(id,name){
+			console.log("?");
+			globalID = id;
+			gloableName = name;
+			$("#mapTitle").text(name);
+			if(markers)
+				markerDelAgain();
+			if(userLocation)	
+				map.removeLayer(userLocation);
+			
+			$.get("http://75.101.129.49/HCare/getvisits?keytype=nurse&keyvalue="+id,function(d){
+				console.log("http://75.101.129.49/HCare/getvisits?keytype=nurse&keyvalue="+id);
+
+					for(var visit in d){
+						console.log("-- "+d[visit].status);
+						//- if(d[visit].status=="In Transit"||d[visit].status=="In Progress"){
+						//- 	//console.log("target "+d[visit].status);
+						//- 	var marker2 = L.marker([d[visit].lat, d[visit].lng], {icon: targetIcon}).addTo(map);
+						//- 	marker2.bindPopup(d[visit].street).openPopup();
+						//- 	marker2.push(marker2);
+						//- 	}else if(d[visit].status=="Unassigned"||d[visit].status=="Completed"||d[visit].status=="Assigned"){
+
+						//- 	//console.log("normal "+d[visit].status);
+							var marker = L.marker([d[visit].lat, d[visit].lng]).addTo(map);
+							marker.bindPopup(d[visit].street).openPopup();
+							markers.push(marker);
+							//- }
+							
+							
+
+					}
+				});
+
+			$.get("http://75.101.129.49/HCare/getnurse?searchtype=id&searchvalue="+id,function(d){
+				console.log(JSON.stringify(d));
+				map.setView([d[0].lastLat, d[0].lastLng], 16);
+				userLocation = L.marker([d[0].lastLat, d[0].lastLng], {icon: greenIcon}).addTo(map);
+				});
+		}
+
+		function markerDelAgain() {
+
+			for(i=0;i<markers.length;i++) {
+				map.removeLayer(markers[i]);
+				}  
+		}
+
+		loadData();
+
+	script(type='text/javascript').
+		function getUrlParameter(sParam)
+			{
+				var sPageURL = window.location.search.substring(1);
+				var sURLVariables = sPageURL.split('&');
+				for (var i = 0; i < sURLVariables.length; i++) 
+			{
+				var sParameterName = sURLVariables[i].split('=');
+				if (sParameterName[0] == sParam) 
+				{
+					return sParameterName[1];
+				}
+			}
+		}
+		var map = L.map('map');
+		L.tileLayer('http://{s}.tiles.mapbox.com/v3/examples.map-i86knfo3/{z}/{x}/{y}.png', {
+			maxZoom: 18
+		}).addTo(map);
+
+		var greenIcon = L.icon({
+			iconUrl: '/images/user.png'
+		});
+
+		var targetIcon = L.icon({
+			iconUrl: '/images/target.png'
+		});
+
+		function refresh(){
+			loadData();
+		}
+
+		setInterval(function(){loadMap(globalID,gloableName)},3000);
+		//setInterval(function(){loadData()},3000);
+		

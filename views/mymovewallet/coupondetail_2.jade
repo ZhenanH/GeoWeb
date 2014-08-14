@@ -8,6 +8,17 @@ block content
 				a.navbar-brand.pull-left(href="./brands2") Back
 
 	.container
+		.row(style="border:1px solid #ddd; margin:1px 0 4px 0 ; border-radius:4px;background-color:white", id="locationSwitcher")
+			.col-xs-7
+				h4(style="font-size:13px;") Remind me near <span id="reminderName"></span>
+			.col-xs-5
+				.onoffswitch(style="margin-top:8px;")
+					input.onoffswitch-checkbox(type="checkbox" name="onoffswitch" id="myonoffswitch" )
+					label.onoffswitch-label(for="myonoffswitch")
+						span.onoffswitch-inner
+						span.onoffswitch-switch
+
+
 		.row
 			.col-xs-12
 				.thumbnail
@@ -21,6 +32,10 @@ block content
 	script(type='text/javascript').
 		mixpanel.track("check coupon detail from main page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
+		if(!currentCoupon.isInstoreCoupon)
+			$("#locationSwitcher").hide();
+		$("#reminderName").text(currentCoupon.brandName);
+
 		//alert(currentCoupon);
 		$(".thumbnail").each(function(){
 				$(this).find("img").attr("src",currentCoupon.brandPic);
@@ -30,6 +45,10 @@ block content
 				if(currentCoupon.openCouponLink){
 					$(this).find(".couponCodes").empty();
 					$(this).find(".couponCodes").append("<button type='button' url='"+currentCoupon.openCouponLink+"' class='btn btn-success openCouponLink'>Open Coupon</button>");
+					//- if(currentCoupon.couponCode){
+					//- 	$(this).find(".couponCodes").append("<div><div>or<div style='border:1px solid'>use code online: "+currentCoupon.couponCode+"<div>");
+					//- }
+
 				}
 				$(this).find("#howToUse").text(currentCoupon.howTo);
 				if(sessionStorage.getItem("is_saved")=="unSaved")
@@ -42,6 +61,9 @@ block content
 				if(currentCoupon.websiteURL){
 					$(this).append("<div class='goShoppingButton' url='"+currentCoupon.websiteURL+"'>Go shop online</div>");					
 				}
+				if(currentCoupon.isInstoreCoupon){
+					$(this).append("<div class='findNearBy' storeName='"+currentCoupon.brandName+"'>Find nearby stores</div>");					
+				}
 
 			});
 		
@@ -49,6 +71,12 @@ block content
 			//alert($(this).attr("url"));
 			mixpanel.track("go shopping online");
 			sendToApp("openWebView", $(this).attr("url"));
+			});
+
+		$(".findNearBy").click(function(e){
+			//alert($(this).attr("url"));
+			mixpanel.track("find nearby stores");
+			sendToApp("openNearbyMap", $(this).attr("storeName"));
 			});
 
 		$(".openCouponLink").click(function(e){
@@ -111,6 +139,16 @@ block content
 				// Send the dimensions to Parse along with the 'search' event
 				Parse.Analytics.track('saveCouopn', dimensions);
 			}
+
+			$("#myonoffswitch").click(function(e){
+				if(this.checked){
+					mixpanel.track("turn on location reminder");
+					sendToApp("turnonlocationreminder", currentCoupon.brandName);
+				}else{
+					mixpanel.track("turn off location reminder");
+					sendToApp("turnofflocationreminder", currentCoupon.brandName);
+				}
+			});
 
 
 

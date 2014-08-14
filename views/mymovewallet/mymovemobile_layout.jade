@@ -33,6 +33,7 @@ html
 			//var userObjID = null;
 			var userName;
 			var currentUser;
+			var userType;
 
 			$(document).ready(function () {
 				// ClickTale Top part -->
@@ -94,6 +95,12 @@ html
 
 
 		script(type='text/javascript').
+
+			function identifyTracking(){		
+				mixpanel.register({"User Type": userType});
+				console.log(userType);
+			}
+
 			function loginUser(){
 				// alert("here");
 				console.log(userObjID);

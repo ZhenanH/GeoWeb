@@ -333,6 +333,8 @@ app.namespace('/mymovemobile',function(){
 		title:'Movers'
 		});
 	});
+
+
 });
 
 app.get('/api', function(req,res){
@@ -383,6 +385,22 @@ app.get('/console', function(req,res){
 	
 });
 
+app.namespace('/nurse',function(){
+
+	app.get('/', function(req,res){
+		res.render('nurse/nurse_jobs',{
+		title:'Nurse'
+		});
+	});
+
+	app.get('/map', function(req,res){
+		res.render('nurse/nurse_map',{
+		title:'Nurse'
+		});
+	});
+
+
+});
 
 app.get('/heatmap', function(req,res){
 	res.render('heatmap',{title:'Heatmap'});

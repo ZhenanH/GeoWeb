@@ -1,0 +1,63 @@
+doctype html
+html
+	head
+		title #{title} - My Move
+		link(rel="stylesheet" href="/stylesheets/nurse.css")
+		link(rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css")
+		link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
+		link(rel="stylesheet" href="http://getbootstrap.com/assets/css/docs.min.css")
+
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
+		script(src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js")
+		
+
+	body
+		script(type='text/javascript').
+			$(document).ready(function () {
+				// ClickTale Top part -->
+				var WRInitTime=(new Date()).getTime();
+				//ClickTale end of Top part -->
+			});
+
+			var WRInitTime=(new Date()).getTime();
+
+		.navbar.navbar-default.navbar-static-top(style="background: none repeat scroll 0 0 #1469B7")
+			.container
+				ul.nav.navbar-nav
+					li(style="color: #FFF; padding: 8px; font-size: 150%;") ABC Visiting Nurse Portal
+
+		block content
+
+						
+
+		
+		.navbar.navbar-fixed-bottom(style="background-color: #1469B7")
+			.container
+				ul.nav.navbar-nav
+					li.img#pb-logo(style="margin-top: 3px; margin-bottom: 3px;" src="http://75.101.129.49/HCare/img/pb_software_ko.png")
+				ul.nav.navbar-nav.pull-right
+					li
+						p.navbar-text(style="margin: 5px; color: #FFF") © copyright 2014
+
+		script(type='text/javascript').
+			$(document).ready(function () {
+				
+			});
+
+			function getUrlParameter(sParam)
+				{
+					var sPageURL = window.location.search.substring(1);
+					var sURLVariables = sPageURL.split('&');
+					for (var i = 0; i < sURLVariables.length; i++) 
+				{
+					var sParameterName = sURLVariables[i].split('=');
+					if (sParameterName[0] == sParam) 
+					{
+						return sParameterName[1];
+					}
+				}
+			}
+
+
+		
