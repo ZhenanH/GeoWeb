@@ -150,6 +150,8 @@ app.namespace('/movers',function(){
 	});
 });
 
+
+
 app.namespace('/mymovemobile',function(){
 
 	app.get('/landing', function(req,res){
@@ -288,7 +290,7 @@ app.namespace('/mymovemobile',function(){
 		var locationString = url_parts.query.locationString;
 		
 		
-		var requestUrl = "http://lesserthan.com/api.getDealsZip/06460/json";
+		var requestUrl = "http://lesserthan.com/api.getDealsZip/06484/json";
 
 		if(latlng!="null"){
 			var lat = latlng.split(',')[0];
@@ -399,6 +401,16 @@ app.namespace('/nurse',function(){
 		});
 	});
 
+
+});
+
+app.namespace('/angular',function(){
+
+	app.get('/', function(req,res){
+		res.render('angular/index',{
+		title:'Angular'
+		});
+	});
 
 });
 

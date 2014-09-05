@@ -56,10 +56,10 @@ block content
 							// The object was retrieved successfully.
 							//console.log($(this).attr("id"));
 							var mySavedCoupons = theCurrentUser.get("savedCoupons");
-							if(mySavedCoupons.length>=0)
+							if(mySavedCoupons&&mySavedCoupons.length>=0)
 								$("#savedCouponCount").text(mySavedCoupons.length);
 
-							if(mySavedCoupons.indexOf($(thisSaveButton).attr("id"))>=0){
+							if(mySavedCoupons&&mySavedCoupons.indexOf($(thisSaveButton).attr("id"))>=0){
 								$(thisSaveButton).css('background-color','#ddd').text('saved');
 								$(thisSaveButton).off('click');
 								$(thisSaveButton).parent().attr('isSaved','saved');
@@ -177,6 +177,11 @@ block content
 
 		function trackMenu(){
 			mixpanel.track("click on menu");
+		}
+
+		function goFromNotification(){
+			
+			location.href='./mycoupons_2';
 		}
 
 

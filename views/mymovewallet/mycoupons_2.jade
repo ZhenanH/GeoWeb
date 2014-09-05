@@ -94,7 +94,7 @@ block content
 							
 							$(thisCoupon).find("#expireDate").append("<button class='removeButton btn btn-danger'>Remove</button>");
 							$(thisCoupon).find(".removeButton").click(function(){
-								deleteCoupon(this, $(thisCoupon).attr('id'));
+								deleteCoupon(this, $(thisCoupon).attr('id'),coupons[index].get("brandName"));
 								});
 							//$(thisCoupon).attr('id')
 
@@ -121,7 +121,7 @@ block content
 			
 
 
-		function deleteCoupon(deletButoon, couponToDelete){
+		function deleteCoupon(deletButoon, couponToDelete, brandName){
 				mixpanel.track("remove coupon");
 				console.log("couponid: "+couponToDelete);
 				console.log("userid: "+sessionStorage.getItem("userID"));
@@ -145,6 +145,8 @@ block content
 							success:function(user){
 								//remove the div
 								$(deletButoon).parent().parent().parent().parent().remove();
+								sendToApp("deletegeofence", brandName);
+
 								},
 							error: function(user,error){
 								alert(JSON.strinhgify(error));

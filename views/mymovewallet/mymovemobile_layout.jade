@@ -6,7 +6,7 @@ html
 		link(rel='stylesheet', href='/stylesheets/pixleight_style.css')
 		link(rel='stylesheet', href='/stylesheets/multi-columns-row.css')
 		link(rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css")
-		link(rel="stylesheet" href="/stylesheets/jasny-bootstrap.css")
+		//link(rel="stylesheet" href="/stylesheets/jasny-bootstrap.css")
 		link(rel="stylesheet" href="http://getbootstrap.com/assets/css/docs.min.css")
 		link(rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css")
 		link(rel="stylesheet" href="/stylesheets/navmenu-reveal.css")
@@ -47,7 +47,7 @@ html
 		block content
 
 		script(src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js")
-		script(src="http://jasny.github.io/bootstrap/dist/js/jasny-bootstrap.min.js")
+		//script(src="http://jasny.github.io/bootstrap/dist/js/jasny-bootstrap.min.js")
 		script(src="/javascripts/ie-row-fix.js")
 		//script(src="/javascripts/bootbox.min.js")
 		
@@ -135,7 +135,7 @@ html
 				}
 
 			var sendToApp = function(_key, _val) {
-
+				//alert("sending: "+_key + " and "+_val);
 				var iframe = document.createElement("IFRAME"); 
 				iframe.setAttribute("src", _key + ":##sendToApp##" + _val); 
 				document.documentElement.appendChild(iframe); 
@@ -143,6 +143,8 @@ html
 				iframe = null; 
 				//alert("getting it: "+_key+"  and  "+_val);
 			}; 
+
+
 
 		
 		

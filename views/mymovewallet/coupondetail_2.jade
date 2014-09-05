@@ -13,7 +13,7 @@ block content
 				h4(style="font-size:13px;") Remind me near <span id="reminderName"></span>
 			.col-xs-5
 				.onoffswitch(style="margin-top:8px;")
-					input.onoffswitch-checkbox(type="checkbox" name="onoffswitch" id="myonoffswitch" )
+					input.onoffswitch-checkbox(type="checkbox" name="onoffswitch" id="myonoffswitch" disabled )
 					label.onoffswitch-label(for="myonoffswitch")
 						span.onoffswitch-inner
 						span.onoffswitch-switch
@@ -30,6 +30,11 @@ block content
 					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
 
 	script(type='text/javascript').
+
+		function checkBack(){
+			sendToApp("checkismonitoring", currentCoupon.brandName);
+		}
+
 		mixpanel.track("check coupon detail from main page");
 		var currentCoupon = JSON.parse(sessionStorage.getItem("current_coupon"));
 		if(!currentCoupon.isInstoreCoupon)
@@ -83,6 +88,7 @@ block content
 			//alert($(this).attr("url"));
 			mixpanel.track("open coupon link");
 			sendToApp("openWebView", $(this).attr("url"));
+			//sendToApp("checkismonitoring", currentCoupon.brandName);
 			});
 
 
@@ -141,17 +147,53 @@ block content
 			}
 
 			$("#myonoffswitch").click(function(e){
+
 				if(this.checked){
 					mixpanel.track("turn on location reminder");
 					sendToApp("turnonlocationreminder", currentCoupon.brandName);
+					if(sessionStorage.getItem("is_saved")=="unSaved"){
+						$( ".saveButton" ).trigger( "click" );
+						//alert("triggered");
+					}
 				}else{
 					mixpanel.track("turn off location reminder");
 					sendToApp("turnofflocationreminder", currentCoupon.brandName);
 				}
 			});
 
+			$(".onoffswitch").click(function(e){
+				if($(this).find("#myonoffswitch").attr("disabled")){
+					sendToApp("enableswitch", currentCoupon.brandName);
+					//alert("going to enable");
+				}
+				//if($(this).)
+			});
+			
+			
 
+			function configureSwitch(isOn){
+				if(isOn==1){
+					$("#myonoffswitch").prop('checked', true);
+				}else{
+					$("#myonoffswitch").prop('checked', false);
+				}
+			}
 
+			function enableSwitch(){
+				$("#myonoffswitch").prop('disabled', false);
+
+			}
+
+			function turnonafterpermission(){
+				$("#myonoffswitch").prop('disabled', false);
+				$("#myonoffswitch").prop('checked', true);
+				mixpanel.track("turn on location reminder");
+				sendToApp("turnonlocationreminder", currentCoupon.brandName);
+				if(sessionStorage.getItem("is_saved")=="unSaved"){
+					$( ".saveButton" ).trigger( "click" );
+					//alert("triggered");
+				}
+			}
 
 
 
