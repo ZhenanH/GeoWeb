@@ -70,15 +70,7 @@ block content
 			});
 
 
-		$("#myonoffswitch").click(function(e){
-				if(this.checked){
-					mixpanel.track("turn on location reminder");
-					sendToApp("turnonlocationreminder", currentCoupon.brandName);
-				}else{
-					mixpanel.track("turn off location reminder");
-					sendToApp("turnofflocationreminder", currentCoupon.brandName);
-				}
-			});
+
 
 		$("#myonoffswitch").click(function(e){
 
