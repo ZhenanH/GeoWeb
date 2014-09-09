@@ -74,18 +74,18 @@ block content
 
 		$("#myonoffswitch").click(function(e){
 
-				if(this.checked){
-					mixpanel.track("turn on location reminder");
-					sendToApp("turnonlocationreminder", currentCoupon.brandName);
-					if(sessionStorage.getItem("is_saved")=="unSaved"){
-						$( ".saveButton" ).trigger( "click" );
-						//alert("triggered");
-					}
-				}else{
-					mixpanel.track("turn off location reminder");
-					sendToApp("turnofflocationreminder", currentCoupon.brandName);
+			if(this.checked){
+				mixpanel.track("turn on location reminder");
+				sendToApp("turnonlocationreminder", currentCoupon.brandName);
+				if(sessionStorage.getItem("is_saved")=="unSaved"){
+					$( ".saveButton" ).trigger( "click" );
+					//alert("triggered");
 				}
-			});
+			}else{
+				mixpanel.track("turn off location reminder");
+				sendToApp("turnofflocationreminder", currentCoupon.brandName);
+			}
+		});
 
 		$(".onoffswitch").click(function(e){
 			if($(this).find("#myonoffswitch").attr("disabled")){
