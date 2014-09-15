@@ -151,6 +151,8 @@ block content
 				if(this.checked){
 					mixpanel.track("turn on location reminder");
 					sendToApp("turnonlocationreminder", currentCoupon.brandName);
+					//console.log(turing on reminder);
+					trackReminder("on");
 					if(sessionStorage.getItem("is_saved")=="unSaved"){
 						$( ".saveButton" ).trigger( "click" );
 						//alert("triggered");
@@ -158,6 +160,7 @@ block content
 				}else{
 					mixpanel.track("turn off location reminder");
 					sendToApp("turnofflocationreminder", currentCoupon.brandName);
+					trackReminder("off");
 				}
 			});
 
@@ -189,10 +192,30 @@ block content
 				$("#myonoffswitch").prop('checked', true);
 				mixpanel.track("turn on location reminder");
 				sendToApp("turnonlocationreminder", currentCoupon.brandName);
+				trackReminder("on");
 				if(sessionStorage.getItem("is_saved")=="unSaved"){
 					$( ".saveButton" ).trigger( "click" );
 					//alert("triggered");
 				}
+			}
+
+			function trackReminder(action){
+				//console.log(setting reminder);
+				var ReminderSetting = Parse.Object.extend("ReminderSetting");
+				var reminderSetting = new ReminderSetting();
+
+				reminderSetting.set("brand", currentCoupon.brandName);
+				reminderSetting.set("user", sessionStorage.getItem("userID"));
+				reminderSetting.set("action", action);
+
+				reminderSetting.save(null, {
+				success: function(reminderSetting) {
+				
+				},
+				error: function(reminderSetting, error) {
+
+				}
+				});
 			}
 
 
