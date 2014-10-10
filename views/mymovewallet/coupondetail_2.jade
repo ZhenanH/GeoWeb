@@ -13,7 +13,7 @@ block content
 				h4(style="font-size:13px;") Remind me near <span id="reminderName"></span>
 			.col-xs-5
 				.onoffswitch(style="margin-top:8px;")
-					input.onoffswitch-checkbox(type="checkbox" name="onoffswitch" id="myonoffswitch" disabled )
+					input.onoffswitch-checkbox(type="checkbox" name="onoffswitch" id="myonoffswitch" )
 					label.onoffswitch-label(for="myonoffswitch")
 						span.onoffswitch-inner
 						span.onoffswitch-switch
@@ -24,8 +24,8 @@ block content
 				.thumbnail
 					img.detailCouponImage.img-responsive(src="http://cdn2.hubspot.net/hub/231191/file-23747466-png/wayfair.png?t=1363201553000")
 					.caption
-						h4 Up To 70% Off Father's Day Finds 
-					#expireDate  
+						h4 Up To 70% Off Father's Day Finds
+					#expireDate
 					.couponCodes No code needed
 					.callout.bottom#howToUse Paste this code at checkout when you are done shopping.
 
@@ -57,21 +57,21 @@ block content
 				}
 				$(this).find("#howToUse").text(currentCoupon.howTo);
 				if(sessionStorage.getItem("is_saved")=="unSaved")
-					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"''>Save</div>");
+					$(this).append("<div class='saveButton' id='"+currentCoupon.objectId+"'>Save</div>");
 				if(currentCoupon.expirationAt){
 					//console.log((new Date(currentCoupon.expirationAt.iso)).toLocaleDateString());
 					var theDate = (new Date(currentCoupon.expirationAt.iso)).toLocaleDateString();
 					$(this).find("#expireDate").text("Expiring at: "+theDate);
 				}
 				if(currentCoupon.websiteURL){
-					$(this).append("<div class='goShoppingButton' url='"+currentCoupon.websiteURL+"'>Go shop online</div>");					
+					$(this).append("<div class='goShoppingButton' url='"+currentCoupon.websiteURL+"'>Go shop online</div>");
 				}
 				if(currentCoupon.isInstoreCoupon){
-					$(this).append("<div class='findNearBy' storeName='"+currentCoupon.brandName+"'>Find nearby stores</div>");					
+					$(this).append("<div class='findNearBy' storeName='"+currentCoupon.brandName+"'>Find nearby stores</div>");
 				}
 
 			});
-		
+
 		$(".goShoppingButton").click(function(e){
 			//alert($(this).attr("url"));
 			mixpanel.track("go shopping online");
@@ -93,26 +93,26 @@ block content
 
 
 		$(".saveButton").click(function(e){
-			
+
 			if(currentCoupon.openCouponLink)
 				mixpanel.track("save in store coupon on detail page");
-			else	
+			else
 				mixpanel.track("save coupon on detail page");
 
 			var thisButton = this;
-			
+
 				trackSaveButton($(thisButton).attr("id"));
 				var User = Parse.Object.extend("User");
 				var query = new Parse.Query(User);
 				query.get(sessionStorage.getItem("userID"), {
 					success: function(theCurrentUser) {
-					// The object was retrieved successfully.
+						// The object was retrieved successfully.
 						var savedCoupons = theCurrentUser.get("savedCoupons");
 
 						if(savedCoupons)
 							savedCoupons.push($(thisButton).attr("id"));
 						else
-							savedCoupons = [$(thisButton).attr("id")];	
+							savedCoupons = [$(thisButton).attr("id")];
 
 						theCurrentUser.set("savedCoupons",savedCoupons);
 
@@ -133,7 +133,6 @@ block content
 					}
 				});
 
-
 			});
 
 			function trackSaveButton(couponId){
@@ -146,7 +145,22 @@ block content
 				Parse.Analytics.track('saveCouopn', dimensions);
 			}
 
+			var auth = false;
+			function alreadyAuth() {
+				auth = true;
+			}
+
 			$("#myonoffswitch").click(function(e){
+				//alert("The auth is "+auth);
+				if(!auth) {
+					mixpanel.track("request location permission");
+					//alert("Inside return false statement in click");
+					sendToApp("enableswitch", currentCoupon.brandName);
+					auth = true;
+					return false;
+				}
+
+				//alert("checkbox: "+this.checked);
 
 				if(this.checked){
 					mixpanel.track("turn on location reminder");
@@ -164,15 +178,17 @@ block content
 				}
 			});
 
-			$(".onoffswitch").click(function(e){
-				if($(this).find("#myonoffswitch").attr("disabled")){
+			/*$(".onoffswitch").click(function(e){
+				//if($(this).find("#myonoffswitch").attr("disabled")){
+				if(!auth){
 					sendToApp("enableswitch", currentCoupon.brandName);
+					auth = true;
 					//alert("going to enable");
 				}
 				//if($(this).)
-			});
-			
-			
+			});*/
+
+
 
 			function configureSwitch(isOn){
 				if(isOn==1){
@@ -187,16 +203,20 @@ block content
 
 			}
 
+
 			function turnonafterpermission(){
 				$("#myonoffswitch").prop('disabled', false);
-				$("#myonoffswitch").prop('checked', true);
+				//$("#myonoffswitch").prop('checked', false);
+				$("#myonoffswitch").checked = true;
+				//$( "#myonoffswitch" ).trigger( "click" );
+				/*alert($("#myonoffswitch").prop('checked'));
 				mixpanel.track("turn on location reminder");
 				sendToApp("turnonlocationreminder", currentCoupon.brandName);
 				trackReminder("on");
 				if(sessionStorage.getItem("is_saved")=="unSaved"){
 					$( ".saveButton" ).trigger( "click" );
 					//alert("triggered");
-				}
+				}*/
 			}
 
 			function trackReminder(action){
@@ -210,19 +230,10 @@ block content
 
 				reminderSetting.save(null, {
 				success: function(reminderSetting) {
-				
+
 				},
 				error: function(reminderSetting, error) {
 
 				}
 				});
 			}
-
-
-
-
-
-
-
-
-

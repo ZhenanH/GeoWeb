@@ -11,19 +11,19 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>http://mymove.parseapp.com/v211/MyMoveWallet.ipa</string>
+					<string>http://mymove.parseapp.com/GeoFence/GeoFenceTest.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
 			<dict>
 				<key>bundle-identifier</key>
-				<string>com.leandevelop.MyMoveWallet</string>
+				<string>com.leandevelop.GeoFenceTest</string>
 				<key>bundle-version</key>
-				<string>2.11</string>
+				<string>1.0</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>title</key>
-				<string>MyMove</string>
+				<string>GeoFenceTest</string>
 			</dict>
 		</dict>
 	</array>
